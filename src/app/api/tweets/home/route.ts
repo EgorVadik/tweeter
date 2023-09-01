@@ -1,10 +1,14 @@
 import { getServerAuthSession } from '@/server/auth'
 import { prisma } from '@/server/db'
-import HomeWrapper from '@/components/wrappers/home-wrapper'
+import { NextResponse } from 'next/server'
 
-export default async function Home() {
+export async function GET() {
     const session = await getServerAuthSession()
-    const initialTweets = await prisma.tweet.findMany({
+    if (!session) {
+        return NextResponse.redirect('/login')
+    }
+
+    const tweets = await prisma.tweet.findMany({
         include: {
             user: {
                 select: {
@@ -18,7 +22,7 @@ export default async function Home() {
                     userId: true,
                 },
                 where: {
-                    userId: session!.user.id,
+                    userId: session.user.id,
                 },
             },
             retweets: {
@@ -55,14 +59,35 @@ export default async function Home() {
         },
     })
 
-    return (
-        <>
-            <main className='container pt-5'>
-                <HomeWrapper
-                    initialTweets={initialTweets}
-                    user={session!.user}
-                />
-            </main>
-        </>
+    return new NextResponse(
+        JSON.stringify({
+            tweets,
+        }),
+        {
+            status: 200,
+        }
     )
+}
+
+export async function POST(req: Request) {
+    const { content, image, privateReply } = (await req.json()) as {
+        content: string
+        image?: string
+        privateReply: boolean
+    }
+    const session = await getServerAuthSession()
+    if (!session) {
+        return NextResponse.redirect('/login')
+    }
+
+    const tweet = await prisma.tweet.create({
+        data: {
+            text: content,
+            image: image ?? undefined,
+            replyPrivate: privateReply,
+            userId: session.user.id,
+        },
+    })
+
+    return NextResponse.json({ tweet }, { status: 201 })
 }
