@@ -1,3 +1,4 @@
+import { prisma } from '@/server/db'
 import { AxiosError } from 'axios'
 import moment from 'moment'
 
@@ -44,4 +45,123 @@ export const formatNumber = (number: number) => {
         notation: 'compact',
     })
     return numberFormatter.format(number)
+}
+
+export const getTweets = async (orderBy: any) => {
+    const tweets = await prisma.tweet.findMany({
+        include: {
+            user: {
+                select: {
+                    id: true,
+                    name: true,
+                    image: true,
+                    followersIds: true,
+                },
+            },
+            likes: {
+                select: {
+                    userId: true,
+                },
+            },
+            retweets: {
+                select: {
+                    userId: true,
+                },
+            },
+            replies: {
+                select: {
+                    id: true,
+                    text: true,
+                    createdAt: true,
+                    user: {
+                        select: {
+                            id: true,
+                            name: true,
+                            image: true,
+                        },
+                    },
+                },
+                orderBy: {
+                    createdAt: 'desc',
+                },
+                take: 2,
+            },
+            savedTweets: {
+                select: {
+                    userId: true,
+                },
+            },
+            _count: {
+                select: {
+                    replies: true,
+                },
+            },
+        },
+        orderBy,
+    })
+
+    return tweets
+}
+
+export const getBookmarkedTweets = async (userId: string, orderBy: any) => {
+    const tweets = await prisma.savedTweet.findMany({
+        where: {
+            userId,
+        },
+        include: {
+            tweet: {
+                include: {
+                    user: {
+                        select: {
+                            id: true,
+                            name: true,
+                            image: true,
+                            followersIds: true,
+                        },
+                    },
+                    likes: {
+                        select: {
+                            userId: true,
+                        },
+                    },
+                    retweets: {
+                        select: {
+                            userId: true,
+                        },
+                    },
+                    replies: {
+                        select: {
+                            id: true,
+                            text: true,
+                            createdAt: true,
+                            user: {
+                                select: {
+                                    id: true,
+                                    name: true,
+                                    image: true,
+                                },
+                            },
+                        },
+                        orderBy: {
+                            createdAt: 'desc',
+                        },
+                        take: 2,
+                    },
+                    savedTweets: {
+                        select: {
+                            userId: true,
+                        },
+                    },
+                    _count: {
+                        select: {
+                            replies: true,
+                        },
+                    },
+                },
+            },
+        },
+        orderBy,
+    })
+
+    return tweets
 }

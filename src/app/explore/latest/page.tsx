@@ -1,11 +1,14 @@
+import ProfileSideNav from '@/components/nav/profile-side-nav'
+import ExploreWrapper from '@/components/wrappers/explore-wrapper'
+import { getTweets } from '@/lib/helpers'
 import { getServerAuthSession } from '@/server/auth'
 import { prisma } from '@/server/db'
-import HomeWrapper from '@/components/wrappers/home-wrapper'
-import { getTweets } from '@/lib/helpers'
+import React from 'react'
 
-export default async function Home() {
+export default async function page() {
     const session = await getServerAuthSession()
-    // const initialTweets = await prisma.tweet.findMany({
+
+    // const topTweets = await prisma.tweet.findMany({
     //     include: {
     //         user: {
     //             select: {
@@ -18,9 +21,6 @@ export default async function Home() {
     //         likes: {
     //             select: {
     //                 userId: true,
-    //             },
-    //             where: {
-    //                 userId: session!.user.id,
     //             },
     //         },
     //         retweets: {
@@ -57,18 +57,9 @@ export default async function Home() {
     //     },
     // })
 
-    const initialTweets = await getTweets({
+    const latestTweets = await getTweets({
         createdAt: 'desc',
     })
 
-    return (
-        <>
-            <main className='container pt-5'>
-                <HomeWrapper
-                    initialTweets={initialTweets}
-                    user={session!.user}
-                />
-            </main>
-        </>
-    )
+    return <ExploreWrapper initialTweets={latestTweets} user={session!.user} />
 }

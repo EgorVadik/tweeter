@@ -108,7 +108,7 @@ export default function TweetCard({
 
             <div className='flex items-center justify-end gap-4 text-xs font-medium tracking-base my-3 text-gray'>
                 <p>
-                    {formatNumber(tweet.replies.length)} <span>Replies</span>
+                    {formatNumber(tweet._count.replies)} <span>Replies</span>
                 </p>
 
                 <p>
@@ -161,7 +161,13 @@ export default function TweetCard({
             </div>
             <Separator className='bg-lighter-gray' />
 
-            <ReplyForm commentFocus={commentFocus} user={currentUser} />
+            {tweet.replyPrivate &&
+            currentUser.id !== tweet.userId &&
+            !tweet.user.followersIds.includes(currentUser.id) ? (
+                <></>
+            ) : (
+                <ReplyForm commentFocus={commentFocus} user={currentUser} />
+            )}
         </div>
     )
 }

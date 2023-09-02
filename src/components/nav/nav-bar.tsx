@@ -5,7 +5,6 @@ import NavItem from './nav-item'
 import { ChevronDown } from 'lucide-react'
 import ProfileDropdown from '../dropdowns/profile-dropdown'
 import Link from 'next/link'
-import { DEFAULT_PROFILE_IMAGE } from '@/lib/constants'
 import UserAvatar from '../cards/user-avatar'
 
 export default async function NavBar() {

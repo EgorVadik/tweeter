@@ -1,28 +1,30 @@
+import ProfileSideNav from '@/components/nav/profile-side-nav'
+import ExploreWrapper from '@/components/wrappers/explore-wrapper'
 import { getServerAuthSession } from '@/server/auth'
 import { prisma } from '@/server/db'
-import { NextResponse } from 'next/server'
+import React from 'react'
 
-export async function GET() {
+export default async function page() {
     const session = await getServerAuthSession()
-    if (!session) {
-        return NextResponse.redirect('/login')
-    }
 
-    const tweets = await prisma.tweet.findMany({
+    const topTweets = await prisma.tweet.findMany({
+        where: {
+            image: {
+                not: null,
+            },
+        },
         include: {
             user: {
                 select: {
                     id: true,
                     name: true,
                     image: true,
+                    followersIds: true,
                 },
             },
             likes: {
                 select: {
                     userId: true,
-                },
-                where: {
-                    userId: session.user.id,
                 },
             },
             retweets: {
@@ -64,35 +66,5 @@ export async function GET() {
         },
     })
 
-    return new NextResponse(
-        JSON.stringify({
-            tweets,
-        }),
-        {
-            status: 200,
-        }
-    )
-}
-
-export async function POST(req: Request) {
-    const { content, image, replyPrivate } = (await req.json()) as {
-        content: string
-        image?: string
-        replyPrivate: boolean
-    }
-    const session = await getServerAuthSession()
-    if (!session) {
-        return NextResponse.redirect('/login')
-    }
-
-    const tweet = await prisma.tweet.create({
-        data: {
-            text: content,
-            image: image ?? undefined,
-            replyPrivate,
-            userId: session.user.id,
-        },
-    })
-
-    return NextResponse.json({ tweet }, { status: 201 })
+    return <ExploreWrapper initialTweets={topTweets} user={session!.user} />
 }

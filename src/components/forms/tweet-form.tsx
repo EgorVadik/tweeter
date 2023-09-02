@@ -40,7 +40,7 @@ export default function TweetForm({ user }: TweetFormProps) {
     const queryClient = useQueryClient()
     const { mutate, isLoading } = useMutation({
         mutationFn: createTweet,
-        onSuccess: (data) => {
+        onSuccess: () => {
             queryClient.invalidateQueries(['tweets'], { exact: true })
             reset()
         },

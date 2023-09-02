@@ -23,17 +23,21 @@ function CurrentlyOn({ className }: { className?: string }) {
 export default function NavItem({ href, text }: Props) {
     const pathname = usePathname()
 
+    const isCurrentlyOn =
+        pathname === href ||
+        (href === '/explore' && pathname.includes('/explore'))
+
     return (
         <Link
             href={href}
             className={cn(
                 `tracking-base font-sm text-light-gray font-medium group hover:text-primary-blue duration-300`,
-                pathname === href && 'text-primary-blue font-semibold'
+                isCurrentlyOn && 'text-primary-blue font-semibold'
             )}
         >
             <li className='px-5 relative py-5'>
                 {text}
-                {pathname === href && <CurrentlyOn />}
+                {isCurrentlyOn && <CurrentlyOn />}
                 <CurrentlyOn className='opacity-0 group-hover:opacity-100 duration-300' />
             </li>
         </Link>

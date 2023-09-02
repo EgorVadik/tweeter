@@ -1,4 +1,4 @@
-import { Tweet, User } from '@prisma/client'
+import { SavedTweet, Tweet, User } from '@prisma/client'
 
 export interface PartialUser {
     id: User['id']
@@ -7,7 +7,9 @@ export interface PartialUser {
 }
 
 export interface HomeTweet extends Tweet {
-    user: PartialUser
+    user: PartialUser & {
+        followersIds: string[]
+    }
     likes: {
         userId: string
     }[]
@@ -23,4 +25,11 @@ export interface HomeTweet extends Tweet {
     savedTweets: {
         userId: string
     }[]
+    _count: {
+        replies: number
+    }
+}
+
+export interface BookmarkedTweet extends SavedTweet {
+    tweet: HomeTweet
 }
