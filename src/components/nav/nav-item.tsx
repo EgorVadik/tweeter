@@ -25,7 +25,8 @@ export default function NavItem({ href, text }: Props) {
 
     const isCurrentlyOn =
         pathname === href ||
-        (href === '/explore' && pathname.includes('/explore'))
+        (href === '/explore' && pathname.includes('/explore')) ||
+        (href === '/bookmarks' && pathname.includes('/bookmarks'))
 
     return (
         <Link

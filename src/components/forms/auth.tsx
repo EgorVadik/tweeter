@@ -3,7 +3,7 @@
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import Link from 'next/link'
-import axios, { AxiosError } from 'axios'
+import axios from 'axios'
 import { signIn } from 'next-auth/react'
 import { User } from '@prisma/client'
 import { showSignUpError } from '@/lib/helpers'
@@ -27,6 +27,11 @@ import {
 } from '@/validations/zod-validations'
 import { Loader2 } from 'lucide-react'
 import { useToast } from '@/components/ui/use-toast'
+// import { UploadButton, UploadDropzone } from '@/utils/uploadthing'
+// import '@uploadthing/react/styles.css'
+
+// import { useDropzone } from 'react-dropzone'
+// import { useCallback } from 'react'
 
 type Props = {
     authType: 'sign-in' | 'sign-up'
@@ -44,6 +49,13 @@ export default function Auth({ authType }: Props) {
     })
     const { toast } = useToast()
     const router = useRouter()
+    // const onDrop = useCallback((acceptedFiles: File[]) => {
+    //     console.log(acceptedFiles)
+
+    //     // Do something with the files
+    // }, [])
+
+    // const { getRootProps, getInputProps } = useDropzone({ onDrop })
 
     const isSignUp = (data: SignUpForm | SignInForm): data is SignUpForm => {
         return 'name' in data
@@ -127,13 +139,40 @@ export default function Auth({ authType }: Props) {
                     </div>
                     {authType === 'sign-up' && (
                         <>
-                            <div className='w-32 h-32 rounded-full m-auto border mt-5'>
-                                <input
-                                    type='file'
-                                    className='sr-only'
+                            {/* <div
+                                className='w-32 h-32 rounded-full m-auto border mt-5'
+                                {...getRootProps()}
+                            > */}
+                            {/* <input
+                                    // {...getInputProps()}
+                                    // type='file'
+                                    // className='sr-only'
                                     // {...register('image')}
-                                />
-                            </div>
+                                /> */}
+
+                            {/* <UploadDropzone
+                                endpoint='profileImageUpload'
+                                className='w-32 h-32 rounded-full m-auto mt-5'
+                                content={{
+                                    label: 'Upload image',
+                                }}
+                                onClientUploadComplete={(url) => {
+                                    alert(url)
+                                }}
+                                onUploadProgress={(progress) => {
+                                    console.log(progress)
+                                }}
+                                onUploadError={(error) => {
+                                    alert(error.message)
+                                }}
+                                onUploadBegin={(file) => {
+                                    alert(file)
+                                }}
+                                config={{
+                                    mode: 'auto',
+                                }}
+                            /> */}
+                            {/* </div> */}
                             <div className='grid gap-2'>
                                 <label htmlFor='name'>
                                     Name

@@ -1,9 +1,10 @@
 import BookmarksWrapper from '@/components/wrappers/bookmarks-wrapper'
-import ExploreWrapper from '@/components/wrappers/explore-wrapper'
-import { getBookmarkedTweets, getTweets } from '@/lib/helpers'
 import { getServerAuthSession } from '@/server/auth'
 import { prisma } from '@/server/db'
 import React from 'react'
+
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
 
 export default async function page() {
     const session = await getServerAuthSession()

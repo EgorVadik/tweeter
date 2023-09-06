@@ -1,34 +1,25 @@
-import BookmarksWrapper from '@/components/wrappers/bookmarks-wrapper'
+import ProfileWrapper from '@/components/wrappers/profile-wrapper'
 import { getServerAuthSession } from '@/server/auth'
 import { prisma } from '@/server/db'
+import { redirect } from 'next/navigation'
 import React from 'react'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
 
-export default async function page() {
-    const session = await getServerAuthSession()
-
-    const bookmarkedTweets = await prisma.savedTweet.findMany({
+export default async function page({
+    params: { id },
+}: {
+    params: { id: string }
+}) {
+    const currentUser = await getServerAuthSession()
+    const user = await prisma.user.findUnique({
         where: {
-            userId: session!.user.id,
-            tweet: {
-                image: {
-                    not: null,
-                },
-            },
+            id,
         },
         include: {
-            tweet: {
+            tweets: {
                 include: {
-                    user: {
-                        select: {
-                            id: true,
-                            name: true,
-                            image: true,
-                            followersIds: true,
-                        },
-                    },
                     likes: {
                         select: {
                             userId: true,
@@ -68,17 +59,25 @@ export default async function page() {
                         },
                     },
                 },
+                orderBy: {
+                    createdAt: 'desc',
+                },
             },
-        },
-        orderBy: {
-            createdAt: 'desc',
         },
     })
 
+    // @ts-ignore
+    delete user?.password
+
+    if (!user) {
+        return redirect('/')
+    }
+
     return (
-        <BookmarksWrapper
-            initialTweets={bookmarkedTweets}
-            user={session!.user}
+        <ProfileWrapper
+            initialTweets={user?.tweets}
+            tweetUser={user}
+            currentUser={currentUser?.user!}
         />
     )
 }

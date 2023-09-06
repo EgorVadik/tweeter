@@ -33,3 +33,32 @@ export interface HomeTweet extends Tweet {
 export interface BookmarkedTweet extends SavedTweet {
     tweet: HomeTweet
 }
+
+export interface ProfileTweet extends Tweet {
+    likes: {
+        userId: string
+    }[]
+    retweets: {
+        userId: string
+    }[]
+    replies: {
+        id: string
+        text: string
+        createdAt: Date
+        user: PartialUser
+    }[]
+    savedTweets: {
+        userId: string
+    }[]
+    _count: {
+        replies: number
+    }
+}
+
+export interface FollowUser extends PartialUser {
+    bio: User['bio']
+    followersIds: string[]
+    // _count: {
+    //     followers: number
+    // }
+}

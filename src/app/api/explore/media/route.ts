@@ -1,15 +1,14 @@
-import ExploreWrapper from '@/components/wrappers/explore-wrapper'
 import { getServerAuthSession } from '@/server/auth'
 import { prisma } from '@/server/db'
-import React from 'react'
+import { NextResponse, NextRequest } from 'next/server'
 
-export const dynamic = 'force-dynamic'
-export const revalidate = 0
-
-export default async function page() {
+export async function GET(request: Request) {
     const session = await getServerAuthSession()
+    if (!session) {
+        return new NextResponse('Unauthorized', { status: 401 })
+    }
 
-    const topTweets = await prisma.tweet.findMany({
+    const tweets = await prisma.tweet.findMany({
         where: {
             image: {
                 not: null,
@@ -68,5 +67,5 @@ export default async function page() {
         },
     })
 
-    return <ExploreWrapper initialTweets={topTweets} user={session!.user} />
+    return new NextResponse(JSON.stringify({ tweets }), { status: 200 })
 }

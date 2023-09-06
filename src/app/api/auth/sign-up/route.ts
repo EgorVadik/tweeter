@@ -2,7 +2,6 @@ import { prisma } from '@/server/db'
 import { signUpSchema } from '@/validations/zod-validations'
 import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library'
 import { hash } from 'bcrypt'
-import { NextResponse, NextRequest } from 'next/server'
 import { ZodError } from 'zod'
 
 export async function POST(req: Request) {

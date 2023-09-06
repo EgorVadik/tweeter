@@ -4,8 +4,9 @@ import { NextResponse } from 'next/server'
 
 export async function GET() {
     const session = await getServerAuthSession()
+
     if (!session) {
-        return NextResponse.redirect('/login')
+        return new NextResponse('Unauthorized', { status: 401 })
     }
 
     const tweets = await prisma.tweet.findMany({
@@ -15,14 +16,12 @@ export async function GET() {
                     id: true,
                     name: true,
                     image: true,
+                    followersIds: true,
                 },
             },
             likes: {
                 select: {
                     userId: true,
-                },
-                where: {
-                    userId: session.user.id,
                 },
             },
             retweets: {

@@ -20,14 +20,6 @@ export default function ProfileSideNav({ navItems }: ProfileSideNavProps) {
                         href={navItem.href}
                     />
                 ))}
-
-                {/* <ProfileSideNavItem text='Tweets' href='/profile/tweets' />
-                <ProfileSideNavItem
-                    text='Tweets & replies'
-                    href='/profile/tweets-with-replies'
-                />
-                <ProfileSideNavItem text='Media' href='/profile/media' />
-                <ProfileSideNavItem text='Likes' href='/profile/likes' /> */}
             </ul>
         </div>
     )

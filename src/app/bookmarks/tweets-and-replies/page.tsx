@@ -13,8 +13,10 @@ export default async function page() {
         where: {
             userId: session!.user.id,
             tweet: {
-                image: {
-                    not: null,
+                replies: {
+                    some: {
+                        userId: session!.user.id,
+                    },
                 },
             },
         },

@@ -5,13 +5,13 @@ import TweetForm from '../forms/tweet-form'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import TweetCard from '../cards/tweet-card'
 import { User as SessionUser } from 'next-auth'
-import { Tweet, User } from '@prisma/client'
-import { HomeTweet, PartialUser } from '@/types/types'
+import { HomeTweet } from '@/types/types'
 import { useQuery } from '@tanstack/react-query'
 import { getTweets } from '@/lib/api-client'
 import { useIntersection } from '@mantine/hooks'
 import { Button } from '../ui/button'
 import { cn } from '@/lib/utils'
+import { usePathname } from 'next/navigation'
 
 type HomeWrapperProps = {
     user: SessionUser
@@ -21,8 +21,9 @@ type HomeWrapperProps = {
 export default function HomeWrapper({ user, initialTweets }: HomeWrapperProps) {
     const [tweetForm, setTweetForm] = useState(false)
     const containerRef = React.useRef<HTMLDivElement>(null)
+    const pathName = usePathname()
     const { data } = useQuery({
-        queryKey: ['tweets'],
+        queryKey: ['tweets', pathName],
         queryFn: getTweets,
         initialData: initialTweets as HomeTweet[],
         staleTime: 1000 * 60 * 5,

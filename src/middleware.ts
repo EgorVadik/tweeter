@@ -6,7 +6,13 @@ export async function middleware(req: NextRequest) {
     const isAuth = !!token
     const pathName = req.nextUrl.pathname
 
-    if (pathName === '/' && !isAuth) {
+    if (
+        (pathName === '/' ||
+            pathName.includes('/profile') ||
+            pathName.includes('/bookmarks') ||
+            pathName.includes('/explore')) &&
+        !isAuth
+    ) {
         return NextResponse.redirect(new URL('/sign-in', req.url))
     }
 
@@ -17,4 +23,13 @@ export async function middleware(req: NextRequest) {
     return NextResponse.next()
 }
 
-export const config = { matcher: ['/', '/sign-in', '/sign-up'] }
+export const config = {
+    matcher: [
+        '/',
+        '/sign-in',
+        '/sign-up',
+        '/profile/:path*',
+        '/bookmarks/:path*',
+        '/explore/:path*',
+    ],
+}

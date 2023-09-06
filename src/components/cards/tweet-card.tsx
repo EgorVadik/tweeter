@@ -1,7 +1,7 @@
 'use client'
 
 import { formatDate, formatNumber } from '@/lib/helpers'
-import { Tweet } from '@prisma/client'
+import { User } from '@prisma/client'
 import Image from 'next/image'
 import TweetActionBtn from '@/components/buttons/tweet-action-btn'
 import { Separator } from '@/components/ui/separator'
@@ -13,19 +13,26 @@ import {
     MdBookmarkBorder,
 } from 'react-icons/md'
 import ReplyForm from '../forms/reply-form'
-import { HomeTweet, PartialUser } from '@/types/types'
-import { User } from 'next-auth'
+import {
+    BookmarkedTweet,
+    HomeTweet,
+    PartialUser,
+    ProfileTweet,
+} from '@/types/types'
+import { User as SessionUser } from 'next-auth'
 import { useState } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { handleTweetActions } from '@/lib/api-client'
 import { AxiosError } from 'axios'
 import { useToast } from '@/components/ui/use-toast'
 import { Loader2 } from 'lucide-react'
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 
 type TweetCardProps = {
-    tweet: HomeTweet
-    user: PartialUser
-    currentUser: User
+    tweet: HomeTweet | ProfileTweet
+    user: PartialUser | User
+    currentUser: SessionUser
 }
 
 export default function TweetCard({
@@ -35,12 +42,13 @@ export default function TweetCard({
 }: TweetCardProps) {
     const [commentFocus, setCommentFocus] = useState(false)
     const { toast } = useToast()
+    const pathName = usePathname()
 
     const queryClient = useQueryClient()
     const { mutate, isLoading } = useMutation({
         mutationFn: handleTweetActions,
         onSuccess: () => {
-            queryClient.invalidateQueries(['tweets'], { exact: true })
+            queryClient.invalidateQueries(['tweets', pathName], { exact: true })
         },
         onError: (err) => {
             if (err instanceof AxiosError) {
@@ -82,7 +90,10 @@ export default function TweetCard({
 
     return (
         <div className='bg-white max-w-3xl shadow-card-shadow rounded-lg p-4 my-5 first:mt-0 last:mb-0'>
-            <div className='flex items-center gap-2'>
+            <Link
+                href={`/profile/${user.id}`}
+                className='flex items-center gap-2'
+            >
                 <UserAvatar name={user.name} image={user.image ?? undefined} />
                 <div className='flex flex-col'>
                     <span className='text-black tracking-base font-medium'>
@@ -92,7 +103,7 @@ export default function TweetCard({
                         {formatDate(tweet.createdAt)}
                     </span>
                 </div>
-            </div>
+            </Link>
             <p className='text-dark-gray tracking-base mt-3'>{tweet.text}</p>
             {tweet.image && (
                 <div className='mt-3'>
@@ -163,7 +174,10 @@ export default function TweetCard({
 
             {tweet.replyPrivate &&
             currentUser.id !== tweet.userId &&
-            !tweet.user.followersIds.includes(currentUser.id) ? (
+            ('user' in tweet
+                ? !tweet.user.followersIds.includes(currentUser.id)
+                : 'followersIds' in user &&
+                  !user.followersIds.includes(currentUser.id)) ? (
                 <></>
             ) : (
                 <ReplyForm commentFocus={commentFocus} user={currentUser} />

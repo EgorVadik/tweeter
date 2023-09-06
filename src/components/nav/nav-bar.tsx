@@ -27,7 +27,7 @@ export default async function NavBar() {
             </ul>
             <div>
                 {session && (
-                    <ProfileDropdown>
+                    <ProfileDropdown currentUser={session.user}>
                         <button className='flex items-center gap-2 rounded-md group'>
                             <UserAvatar
                                 name={session.user.name}

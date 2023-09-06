@@ -14,12 +14,16 @@ import { NewTweetForm, newTweetSchema } from '@/validations/zod-validations'
 import { useToast } from '@/components/ui/use-toast'
 import { Loader2 } from 'lucide-react'
 import { useEffect, useState } from 'react'
+import { usePathname } from 'next/navigation'
+import { UploadButton, Uploader, UploadDropzone } from '@/utils/uploadthing'
+import '@uploadthing/react/styles.css'
 
 type TweetFormProps = {
     user: User
 }
 
 export default function TweetForm({ user }: TweetFormProps) {
+    const pathName = usePathname()
     const [privateReply, setPrivateReply] = useState(false)
     const { toast } = useToast()
     const {
@@ -41,7 +45,7 @@ export default function TweetForm({ user }: TweetFormProps) {
     const { mutate, isLoading } = useMutation({
         mutationFn: createTweet,
         onSuccess: () => {
-            queryClient.invalidateQueries(['tweets'], { exact: true })
+            queryClient.invalidateQueries(['tweets', pathName], { exact: true })
             reset()
         },
         onError: (error) => {
@@ -96,15 +100,54 @@ export default function TweetForm({ user }: TweetFormProps) {
                     <div className='flex items-center justify-between text-primary-blue'>
                         <div className='flex items-center gap-2'>
                             <label htmlFor='tweet-image'>
-                                <input
+                                {/* <input
                                     id='tweet-image'
                                     type='file'
                                     className='sr-only'
+                                /> */}
+                                <UploadDropzone
+                                    content={{
+                                        uploadIcon: (
+                                            <MdOutlineImage
+                                                className='cursor-pointer'
+                                                size={24}
+                                            />
+                                        ),
+                                    }}
+                                    appearance={{
+                                        button: {
+                                            display: 'none',
+                                        },
+                                        allowedContent: {
+                                            display: 'none',
+                                        },
+                                        label: {
+                                            display: 'none',
+                                        },
+                                    }}
+                                    className='w-fit outline-none ring-0 ring-offset-0 p-0 border-0 m-0'
+                                    endpoint='tweetImageUpload'
+                                    onClientUploadComplete={(data) => {
+                                        setValue('image', data![0].url)
+                                    }}
+                                    onUploadProgress={(progress) => {
+                                        console.log(progress)
+                                    }}
+                                    onUploadError={(error) => {
+                                        alert(error.message)
+                                    }}
+                                    onUploadBegin={(file) => {
+                                        alert(file)
+                                    }}
+                                    config={{
+                                        mode: 'auto',
+                                    }}
                                 />
-                                <MdOutlineImage
+
+                                {/* <MdOutlineImage
                                     className='cursor-pointer'
                                     size={24}
-                                />
+                                /> */}
                             </label>
                             <PrivateReplyDropdown
                                 setPrivateReply={handlePrivateReply}
