@@ -32,7 +32,9 @@ export default function ProfileWrapper({
         <>
             <ScrollArea
                 ref={scrollAreaRef}
-                className={cn('h-[calc(100vh-155px)] w-full rounded-lg')}
+                className={cn(
+                    'h-[calc(100vh-155px)] lg:max-w-3xl grow rounded-lg'
+                )}
                 onScroll={handleScroll}
             >
                 {initialTweets?.map((tweet) => (

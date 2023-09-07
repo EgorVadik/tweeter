@@ -55,7 +55,7 @@ export default function HomeWrapper({ user, initialTweets }: HomeWrapperProps) {
             <ScrollArea
                 ref={containerRef}
                 className={cn(
-                    'h-[calc(100vh-110px)] w-full',
+                    'h-[calc(100vh-110px)] lg:max-w-3xl w-full rounded-lg',
                     !entry?.isIntersecting &&
                         tweetForm &&
                         'h-[calc(100vh-350px)]',
@@ -75,6 +75,7 @@ export default function HomeWrapper({ user, initialTweets }: HomeWrapperProps) {
                         currentUser={user}
                     />
                 ))}
+                {/* </div> */}
             </ScrollArea>
         </>
     )

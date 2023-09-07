@@ -17,7 +17,9 @@ export default function BookmarksWrapper({
     return (
         <>
             <ScrollArea
-                className={cn('h-[calc(100vh-155px)] w-full rounded-lg')}
+                className={cn(
+                    'h-[calc(100vh-100px)] lg:max-w-3xl w-full rounded-lg'
+                )}
             >
                 {initialTweets?.map((tweet) => (
                     <TweetCard

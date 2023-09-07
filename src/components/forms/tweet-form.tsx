@@ -15,8 +15,12 @@ import { useToast } from '@/components/ui/use-toast'
 import { Loader2 } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { usePathname } from 'next/navigation'
-import { UploadButton, Uploader, UploadDropzone } from '@/utils/uploadthing'
-import '@uploadthing/react/styles.css'
+import { UploadDropzone } from '@/utils/uploadthing'
+// import '@uploadthing/react/styles.css'
+import Image from 'next/image'
+import { BiTrash } from 'react-icons/bi'
+import { Progress } from '../ui/progress'
+import UploadBtn from '../buttons/upload-btn'
 
 type TweetFormProps = {
     user: User
@@ -25,6 +29,8 @@ type TweetFormProps = {
 export default function TweetForm({ user }: TweetFormProps) {
     const pathName = usePathname()
     const [privateReply, setPrivateReply] = useState(false)
+    const [uploadProgress, setUploadProgress] = useState(0)
+    const [imageUrl, setImageUrl] = useState<string | null>(null)
     const { toast } = useToast()
     const {
         register,
@@ -49,7 +55,6 @@ export default function TweetForm({ user }: TweetFormProps) {
             reset()
         },
         onError: (error) => {
-            console.log(error)
             toast({
                 title: 'Something went wrong',
                 description:
@@ -91,64 +96,58 @@ export default function TweetForm({ user }: TweetFormProps) {
             <div className='flex items-centers'>
                 <UserAvatar name={user.name} image={user.image ?? undefined} />
                 <div className='px-3 py-1 w-full font-medium tracking-base text-dark-gray'>
-                    <textarea
-                        className='w-full resize-none bg-transparent outline-none'
-                        placeholder="What's happening?"
-                        rows={3}
-                        {...register('content')}
-                    />
-                    <div className='flex items-center justify-between text-primary-blue'>
-                        <div className='flex items-center gap-2'>
-                            <label htmlFor='tweet-image'>
-                                {/* <input
-                                    id='tweet-image'
-                                    type='file'
-                                    className='sr-only'
-                                /> */}
-                                <UploadDropzone
-                                    content={{
-                                        uploadIcon: (
-                                            <MdOutlineImage
-                                                className='cursor-pointer'
-                                                size={24}
-                                            />
-                                        ),
-                                    }}
-                                    appearance={{
-                                        button: {
-                                            display: 'none',
-                                        },
-                                        allowedContent: {
-                                            display: 'none',
-                                        },
-                                        label: {
-                                            display: 'none',
-                                        },
-                                    }}
-                                    className='w-fit outline-none ring-0 ring-offset-0 p-0 border-0 m-0'
-                                    endpoint='tweetImageUpload'
-                                    onClientUploadComplete={(data) => {
-                                        setValue('image', data![0].url)
-                                    }}
-                                    onUploadProgress={(progress) => {
-                                        console.log(progress)
-                                    }}
-                                    onUploadError={(error) => {
-                                        alert(error.message)
-                                    }}
-                                    onUploadBegin={(file) => {
-                                        alert(file)
-                                    }}
-                                    config={{
-                                        mode: 'auto',
-                                    }}
+                    <div className='flex items-center gap-2'>
+                        <textarea
+                            className='w-full resize-none bg-transparent outline-none'
+                            placeholder="What's happening?"
+                            rows={3}
+                            {...register('content')}
+                        />
+                        {uploadProgress > 0 && (
+                            <div className='relative w-28'>
+                                <span className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-black z-10 text-sm'>
+                                    {uploadProgress}%
+                                </span>
+                                <Progress value={uploadProgress} />
+                            </div>
+                        )}
+                        {imageUrl !== null && (
+                            <div className='group relative h-24 w-28 mb-2'>
+                                <Image
+                                    src={imageUrl}
+                                    alt='tweet image'
+                                    className='w-full h-full object-cover rounded-xl'
+                                    height={100}
+                                    width={100}
                                 />
 
-                                {/* <MdOutlineImage
-                                    className='cursor-pointer'
-                                    size={24}
-                                /> */}
-                            </label>
+                                <div className='opacity-0 group-hover:opacity-100 absolute inset-0 bg-black/60 rounded-xl duration-300'>
+                                    <button
+                                        type='button'
+                                        className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'
+                                        onClick={() => {
+                                            setImageUrl(null)
+                                            setValue('image', null)
+                                        }}
+                                    >
+                                        <BiTrash
+                                            className='text-light-red'
+                                            size={24}
+                                        />
+                                    </button>
+                                </div>
+                            </div>
+                        )}
+                    </div>
+                    <div className='flex items-center justify-between text-primary-blue'>
+                        <div className='flex items-center gap-2'>
+                            <UploadBtn
+                                setUploadProgress={setUploadProgress}
+                                setImageUrl={setImageUrl}
+                                setValue={setValue}
+                                toast={toast}
+                            />
+
                             <PrivateReplyDropdown
                                 setPrivateReply={handlePrivateReply}
                             >

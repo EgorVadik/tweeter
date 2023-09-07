@@ -13,13 +13,8 @@ export default async function Home() {
     })
 
     return (
-        <>
-            <main className='container pt-5'>
-                <HomeWrapper
-                    initialTweets={initialTweets}
-                    user={session!.user}
-                />
-            </main>
-        </>
+        <main className='container pt-5'>
+            <HomeWrapper initialTweets={initialTweets} user={session!.user} />
+        </main>
     )
 }

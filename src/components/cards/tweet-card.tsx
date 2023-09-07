@@ -89,10 +89,10 @@ export default function TweetCard({
         data.find((retweet) => retweet.userId === currentUser.id) !== undefined
 
     return (
-        <div className='bg-white max-w-3xl shadow-card-shadow rounded-lg p-4 my-5 first:mt-0 last:mb-0'>
+        <div className='bg-white lg:max-w-3xl w-full shadow-card-shadow rounded-lg p-4 my-5 first:mt-0 last:mb-0'>
             <Link
                 href={`/profile/${user.id}`}
-                className='flex items-center gap-2'
+                className='flex items-center gap-2 w-fit hover:bg-black/10 rounded-lg p-1'
             >
                 <UserAvatar name={user.name} image={user.image ?? undefined} />
                 <div className='flex flex-col'>
@@ -104,7 +104,9 @@ export default function TweetCard({
                     </span>
                 </div>
             </Link>
-            <p className='text-dark-gray tracking-base mt-3'>{tweet.text}</p>
+            <p className='text-dark-gray tracking-base mt-3 p-1'>
+                {tweet.text}
+            </p>
             {tweet.image && (
                 <div className='mt-3'>
                     <Image
@@ -137,7 +139,8 @@ export default function TweetCard({
                     onClick={() => setCommentFocus((prev) => !prev)}
                 >
                     <MdOutlineModeComment className='text-xl' />
-                    Comment
+                    <span className='hidden md:inline'>Comment</span>
+                    {/* Comment */}
                 </TweetActionBtn>
                 <TweetActionBtn
                     onClick={() => mutate({ id: tweet.id, action: 'retweet' })}
@@ -148,7 +151,8 @@ export default function TweetCard({
                 >
                     {isLoading && <Loader2 className='animate-spin text-xl' />}
                     <MdLoop className='text-xl' />
-                    Retweet
+                    <span className='hidden md:inline'>Retweet</span>
+                    {/* Retweet */}
                 </TweetActionBtn>
                 <TweetActionBtn
                     onClick={() => mutate({ id: tweet.id, action: 'like' })}
@@ -157,7 +161,8 @@ export default function TweetCard({
                 >
                     {isLoading && <Loader2 className='animate-spin text-xl' />}
                     <MdFavoriteBorder className='text-xl' />
-                    Like
+                    <span className='hidden md:inline'>Like</span>
+                    {/* Like */}
                 </TweetActionBtn>
                 <TweetActionBtn
                     onClick={() => mutate({ id: tweet.id, action: 'save' })}
@@ -167,7 +172,8 @@ export default function TweetCard({
                 >
                     {isLoading && <Loader2 className='animate-spin text-xl' />}
                     <MdBookmarkBorder className='text-xl' />
-                    Save
+                    <span className='hidden md:inline'>Save</span>
+                    {/* Save */}
                 </TweetActionBtn>
             </div>
             <Separator className='bg-lighter-gray' />
@@ -180,7 +186,11 @@ export default function TweetCard({
                   !user.followersIds.includes(currentUser.id)) ? (
                 <></>
             ) : (
-                <ReplyForm commentFocus={commentFocus} user={currentUser} />
+                <ReplyForm
+                    tweetId={tweet.id}
+                    commentFocus={commentFocus}
+                    user={currentUser}
+                />
             )}
         </div>
     )

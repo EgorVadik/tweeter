@@ -81,7 +81,9 @@ export async function POST(req: Request) {
     }
     const session = await getServerAuthSession()
     if (!session) {
-        return NextResponse.redirect('/login')
+        return new NextResponse('Unauthorized', {
+            status: 401,
+        })
     }
 
     const tweet = await prisma.tweet.create({

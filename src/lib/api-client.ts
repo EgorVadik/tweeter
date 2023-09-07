@@ -1,6 +1,5 @@
-import { FollowUser, HomeTweet } from '@/types/types'
-import { NewTweetForm } from '@/validations/zod-validations'
-import { Retweet } from '@prisma/client'
+import type { HomeTweet } from '@/types/types'
+import type { NewReplyForm, NewTweetForm } from '@/validations/zod-validations'
 import axios from 'axios'
 
 export const createTweet = async (tweet: NewTweetForm) => {
@@ -49,4 +48,18 @@ export const setFollowUser = async (
             description: 'Please try again later',
         })
     }
+}
+
+export const createReply = async ({
+    reply,
+    tweetId,
+}: {
+    reply: NewReplyForm
+    tweetId: string
+}) => {
+    const response = await axios.post('/api/tweets/reply', {
+        ...reply,
+        tweetId,
+    })
+    return response.data as HomeTweet
 }

@@ -23,3 +23,10 @@ export const newTweetSchema = z.object({
 })
 
 export type NewTweetForm = z.infer<typeof newTweetSchema>
+
+export const newReplySchema = z.object({
+    content: z.string().min(1).max(2000).trim().nonempty(),
+    image: z.string().url().optional().nullish(),
+})
+
+export type NewReplyForm = z.infer<typeof newReplySchema>

@@ -13,7 +13,7 @@ export default function BookmarksLayout({
 }) {
     return (
         <main className='container pt-5'>
-            <div className='flex gap-5'>
+            <div className='flex lg:flex-row flex-col gap-5'>
                 <ProfileSideNav
                     navItems={[
                         { text: 'Top', href: '/bookmarks' },

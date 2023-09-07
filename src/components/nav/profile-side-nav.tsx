@@ -11,7 +11,7 @@ type ProfileSideNavProps = {
 
 export default function ProfileSideNav({ navItems }: ProfileSideNavProps) {
     return (
-        <div className='bg-white h-fit rounded-lg xl:max-w-sm lg:max-w-xs 2md:max-w-[200px] w-full py-2'>
+        <div className='bg-white h-fit rounded-lg lg:max-w-xs w-full py-2'>
             <ul className='flex flex-col gap-3'>
                 {navItems.map((navItem) => (
                     <ProfileSideNavItem

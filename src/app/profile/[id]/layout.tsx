@@ -20,7 +20,7 @@ export default async function ProfileLayout({
     return (
         <main className='container'>
             <ProfileInfoCard id={id} currentUser={session!.user} />
-            <div className='flex gap-5'>
+            <div className='flex lg:flex-row flex-col gap-5'>
                 <ProfileSideNav
                     navItems={[
                         { text: 'tweets', href: `/profile/${id}` },
