@@ -38,6 +38,12 @@ export async function GET(request: Request) {
                     id: true,
                     text: true,
                     createdAt: true,
+                    image: true,
+                    replyLikes: {
+                        select: {
+                            userId: true,
+                        },
+                    },
                     user: {
                         select: {
                             id: true,

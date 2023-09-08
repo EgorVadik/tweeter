@@ -16,12 +16,7 @@ export interface HomeTweet extends Tweet {
     retweets: {
         userId: string
     }[]
-    replies: {
-        id: string
-        text: string
-        createdAt: Date
-        user: PartialUser
-    }[]
+    replies: Reply[]
     savedTweets: {
         userId: string
     }[]
@@ -41,12 +36,7 @@ export interface ProfileTweet extends Tweet {
     retweets: {
         userId: string
     }[]
-    replies: {
-        id: string
-        text: string
-        createdAt: Date
-        user: PartialUser
-    }[]
+    replies: Reply[]
     savedTweets: {
         userId: string
     }[]
@@ -58,7 +48,15 @@ export interface ProfileTweet extends Tweet {
 export interface FollowUser extends PartialUser {
     bio: User['bio']
     followersIds: string[]
-    // _count: {
-    //     followers: number
-    // }
+}
+
+export interface Reply {
+    id: string
+    text: string
+    createdAt: Date
+    user: PartialUser
+    image: string | null
+    replyLikes: {
+        userId: string
+    }[]
 }

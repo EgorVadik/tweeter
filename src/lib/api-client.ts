@@ -1,4 +1,4 @@
-import type { HomeTweet } from '@/types/types'
+import type { BookmarkedTweet, HomeTweet } from '@/types/types'
 import type { NewReplyForm, NewTweetForm } from '@/validations/zod-validations'
 import axios from 'axios'
 
@@ -62,4 +62,17 @@ export const createReply = async ({
         tweetId,
     })
     return response.data as HomeTweet
+}
+
+export const getBookmarks = async (
+    url?: 'likes' | 'tweets-and-replies' | 'media'
+) => {
+    const response = await axios.get(
+        url === undefined ? '/api/bookmarks' : `/api/bookmarks/${url}`
+    )
+    const { bookmarkedTweets } = response.data as {
+        bookmarkedTweets: BookmarkedTweet[]
+    }
+
+    return bookmarkedTweets
 }

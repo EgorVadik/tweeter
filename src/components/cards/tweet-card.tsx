@@ -28,6 +28,7 @@ import { useToast } from '@/components/ui/use-toast'
 import { Loader2 } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import ReplyCard from './reply-card'
 
 type TweetCardProps = {
     tweet: HomeTweet | ProfileTweet
@@ -140,7 +141,6 @@ export default function TweetCard({
                 >
                     <MdOutlineModeComment className='text-xl' />
                     <span className='hidden md:inline'>Comment</span>
-                    {/* Comment */}
                 </TweetActionBtn>
                 <TweetActionBtn
                     onClick={() => mutate({ id: tweet.id, action: 'retweet' })}
@@ -152,7 +152,6 @@ export default function TweetCard({
                     {isLoading && <Loader2 className='animate-spin text-xl' />}
                     <MdLoop className='text-xl' />
                     <span className='hidden md:inline'>Retweet</span>
-                    {/* Retweet */}
                 </TweetActionBtn>
                 <TweetActionBtn
                     onClick={() => mutate({ id: tweet.id, action: 'like' })}
@@ -162,7 +161,6 @@ export default function TweetCard({
                     {isLoading && <Loader2 className='animate-spin text-xl' />}
                     <MdFavoriteBorder className='text-xl' />
                     <span className='hidden md:inline'>Like</span>
-                    {/* Like */}
                 </TweetActionBtn>
                 <TweetActionBtn
                     onClick={() => mutate({ id: tweet.id, action: 'save' })}
@@ -173,7 +171,6 @@ export default function TweetCard({
                     {isLoading && <Loader2 className='animate-spin text-xl' />}
                     <MdBookmarkBorder className='text-xl' />
                     <span className='hidden md:inline'>Save</span>
-                    {/* Save */}
                 </TweetActionBtn>
             </div>
             <Separator className='bg-lighter-gray' />
@@ -192,6 +189,14 @@ export default function TweetCard({
                     user={currentUser}
                 />
             )}
+            <Separator className='bg-lighter-gray mb-5' />
+            {tweet.replies.map((reply) => (
+                <ReplyCard
+                    key={reply.id}
+                    reply={reply}
+                    currentUserId={currentUser.id}
+                />
+            ))}
         </div>
     )
 }

@@ -46,6 +46,12 @@ export default async function page() {
                             id: true,
                             text: true,
                             createdAt: true,
+                            image: true,
+                            replyLikes: {
+                                select: {
+                                    userId: true,
+                                },
+                            },
                             user: {
                                 select: {
                                     id: true,

@@ -73,6 +73,12 @@ export const getTweets = async (orderBy: any) => {
                     id: true,
                     text: true,
                     createdAt: true,
+                    image: true,
+                    replyLikes: {
+                        select: {
+                            userId: true,
+                        },
+                    },
                     user: {
                         select: {
                             id: true,
@@ -134,6 +140,12 @@ export const getBookmarkedTweets = async (userId: string, orderBy: any) => {
                             id: true,
                             text: true,
                             createdAt: true,
+                            image: true,
+                            replyLikes: {
+                                select: {
+                                    userId: true,
+                                },
+                            },
                             user: {
                                 select: {
                                     id: true,

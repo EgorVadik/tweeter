@@ -2,7 +2,7 @@
 
 import { Separator } from '@/components/ui/separator'
 import { User } from 'next-auth'
-import { MdPublic, MdOutlineImage, MdPeople } from 'react-icons/md'
+import { MdPublic, MdPeople } from 'react-icons/md'
 import { Button } from '@/components/ui/button'
 import PrivateReplyDropdown from '@/components/dropdowns/private-reply-dropdown'
 import UserAvatar from '@/components/cards/user-avatar'
@@ -15,12 +15,8 @@ import { useToast } from '@/components/ui/use-toast'
 import { Loader2 } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { usePathname } from 'next/navigation'
-import { UploadDropzone } from '@/utils/uploadthing'
-// import '@uploadthing/react/styles.css'
-import Image from 'next/image'
-import { BiTrash } from 'react-icons/bi'
-import { Progress } from '../ui/progress'
 import UploadBtn from '../buttons/upload-btn'
+import ImagePreviewCard from '../cards/image-preview-card'
 
 type TweetFormProps = {
     user: User
@@ -53,8 +49,11 @@ export default function TweetForm({ user }: TweetFormProps) {
         onSuccess: () => {
             queryClient.invalidateQueries(['tweets', pathName], { exact: true })
             reset()
+            setImageUrl(null)
+            setUploadProgress(0)
+            setPrivateReply(false)
         },
-        onError: (error) => {
+        onError: () => {
             toast({
                 title: 'Something went wrong',
                 description:
@@ -87,7 +86,7 @@ export default function TweetForm({ user }: TweetFormProps) {
     return (
         <form
             onSubmit={handleSubmit(onSubmit)}
-            className='flex flex-col gap-3 bg-white rounded-xl shadow-card-shadow p-3 max-w-3xl'
+            className='flex flex-col gap-3 bg-white rounded-xl shadow-card-shadow p-3 lg:max-w-3xl w-full'
         >
             <p className='tracking-base font-semibold text-xs text-dark-gray'>
                 Tweet something
@@ -103,41 +102,12 @@ export default function TweetForm({ user }: TweetFormProps) {
                             rows={3}
                             {...register('content')}
                         />
-                        {uploadProgress > 0 && (
-                            <div className='relative w-28'>
-                                <span className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-black z-10 text-sm'>
-                                    {uploadProgress}%
-                                </span>
-                                <Progress value={uploadProgress} />
-                            </div>
-                        )}
-                        {imageUrl !== null && (
-                            <div className='group relative h-24 w-28 mb-2'>
-                                <Image
-                                    src={imageUrl}
-                                    alt='tweet image'
-                                    className='w-full h-full object-cover rounded-xl'
-                                    height={100}
-                                    width={100}
-                                />
-
-                                <div className='opacity-0 group-hover:opacity-100 absolute inset-0 bg-black/60 rounded-xl duration-300'>
-                                    <button
-                                        type='button'
-                                        className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'
-                                        onClick={() => {
-                                            setImageUrl(null)
-                                            setValue('image', null)
-                                        }}
-                                    >
-                                        <BiTrash
-                                            className='text-light-red'
-                                            size={24}
-                                        />
-                                    </button>
-                                </div>
-                            </div>
-                        )}
+                        <ImagePreviewCard
+                            uploadProgress={uploadProgress}
+                            imageUrl={imageUrl}
+                            setValue={setValue}
+                            setImageUrl={setImageUrl}
+                        />
                     </div>
                     <div className='flex items-center justify-between text-primary-blue'>
                         <div className='flex items-center gap-2'>

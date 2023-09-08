@@ -1,9 +1,14 @@
+'use client'
+
 import { BookmarkedTweet } from '@/types/types'
 import { User } from 'next-auth'
 import React from 'react'
 import { ScrollArea } from '../ui/scroll-area'
 import TweetCard from '../cards/tweet-card'
 import { cn } from '@/lib/utils'
+import { usePathname } from 'next/navigation'
+import { useQuery } from '@tanstack/react-query'
+import { getBookmarks } from '@/lib/api-client'
 
 type BookmarksWrapperProps = {
     initialTweets: BookmarkedTweet[]
@@ -14,6 +19,23 @@ export default function BookmarksWrapper({
     initialTweets,
     user,
 }: BookmarksWrapperProps) {
+    const pathName = usePathname()
+    const { data } = useQuery({
+        queryKey: ['tweets', pathName],
+        queryFn:
+            pathName === '/bookmarks'
+                ? () => getBookmarks()
+                : pathName === '/bookmarks/likes'
+                ? () => getBookmarks('likes')
+                : pathName === '/bookmarks/tweets-and-replies'
+                ? () => getBookmarks('tweets-and-replies')
+                : pathName === '/bookmarks/media'
+                ? () => getBookmarks('media')
+                : () => getBookmarks(),
+        initialData: initialTweets as BookmarkedTweet[],
+        staleTime: 1000 * 60 * 5,
+    })
+
     return (
         <>
             <ScrollArea
@@ -21,7 +43,7 @@ export default function BookmarksWrapper({
                     'h-[calc(100vh-100px)] lg:max-w-3xl w-full rounded-lg'
                 )}
             >
-                {initialTweets?.map((tweet) => (
+                {data?.map((tweet) => (
                     <TweetCard
                         key={tweet.id}
                         tweet={tweet.tweet}

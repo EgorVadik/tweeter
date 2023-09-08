@@ -50,6 +50,8 @@ export default function ReplyForm({
         onSuccess: () => {
             queryClient.invalidateQueries(['tweets', pathName], { exact: true })
             reset()
+            setImageUrl(null)
+            setUploadProgress(0)
         },
         onError: () => {
             toast({

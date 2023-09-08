@@ -1,47 +1,33 @@
-import ProfileWrapper from '@/components/wrappers/profile-wrapper'
 import { getServerAuthSession } from '@/server/auth'
 import { prisma } from '@/server/db'
-import { redirect } from 'next/navigation'
+import { NextResponse } from 'next/server'
 
-export const dynamic = 'force-dynamic'
-export const revalidate = 0
+export async function GET() {
+    const session = await getServerAuthSession()
+    if (!session) return new NextResponse('Unauthorized', { status: 401 })
 
-export default async function page({
-    params: { id },
-}: {
-    params: { id: string }
-}) {
-    const currentUser = await getServerAuthSession()
-    const user = await prisma.user.findUnique({
+    const bookmarkedTweets = await prisma.savedTweet.findMany({
         where: {
-            id,
-        },
-        include: {
-            followers: {
-                select: {
-                    id: true,
-                    name: true,
-                    image: true,
-                    bio: true,
-                },
-            },
-            following: {
-                select: {
-                    id: true,
-                    name: true,
-                    image: true,
-                    bio: true,
-                },
-            },
-            tweets: {
-                where: {
-                    likes: {
-                        some: {
-                            userId: id,
-                        },
+            userId: session!.user.id,
+            tweet: {
+                replies: {
+                    some: {
+                        userId: session!.user.id,
                     },
                 },
+            },
+        },
+        include: {
+            tweet: {
                 include: {
+                    user: {
+                        select: {
+                            id: true,
+                            name: true,
+                            image: true,
+                            followersIds: true,
+                        },
+                    },
                     likes: {
                         select: {
                             userId: true,
@@ -87,20 +73,14 @@ export default async function page({
                         },
                     },
                 },
-                orderBy: {
-                    createdAt: 'desc',
-                },
             },
+        },
+        orderBy: {
+            createdAt: 'desc',
         },
     })
 
-    if (!user) return redirect('/')
-
-    return (
-        <ProfileWrapper
-            initialTweets={user.tweets}
-            tweetUser={user}
-            currentUser={currentUser?.user!}
-        />
-    )
+    return new NextResponse(JSON.stringify({ bookmarkedTweets }), {
+        status: 200,
+    })
 }
