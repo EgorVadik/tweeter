@@ -1,11 +1,13 @@
 import './globals.css'
-import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import { Toaster } from '@/components/ui/toaster'
 import ClientProviders from '@/components/client-providers'
 import NavBar from '@/components/nav/nav-bar'
 import React from 'react'
 import NavBarMob from '@/components/nav/nav-bar-mob'
+import HiddenWrapper from '@/components/wrappers/hidden-wrapper'
+
+import type { Metadata } from 'next'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -33,9 +35,13 @@ export default function RootLayout({
                 style={{}}
             >
                 <ClientProviders>
-                    <NavBar />
+                    <HiddenWrapper>
+                        <NavBar />
+                    </HiddenWrapper>
                     {children}
-                    <NavBarMob />
+                    <HiddenWrapper>
+                        <NavBarMob />
+                    </HiddenWrapper>
                     {modal}
                     <Toaster />
                 </ClientProviders>

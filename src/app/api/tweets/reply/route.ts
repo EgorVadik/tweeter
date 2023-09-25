@@ -1,6 +1,6 @@
 import { getServerAuthSession } from '@/server/auth'
 import { prisma } from '@/server/db'
-import { NextResponse, NextRequest } from 'next/server'
+import { NextResponse } from 'next/server'
 
 export async function POST(req: Request) {
     const { content, image, tweetId } = (await req.json()) as {

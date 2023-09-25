@@ -1,4 +1,3 @@
-import { getBookmarkedTweets } from '@/lib/helpers'
 import { getServerAuthSession } from '@/server/auth'
 import { prisma } from '@/server/db'
 import { NextResponse } from 'next/server'
@@ -23,16 +22,6 @@ export async function GET() {
             tweet: {
                 include: {
                     ...TWEET_OPTIONS,
-                    // savedTweets: {
-                    //     select: {
-                    //         userId: true,
-                    //     },
-                    // },
-                    // _count: {
-                    //     select: {
-                    //         replies: true,
-                    //     },
-                    // },
                 },
             },
         },

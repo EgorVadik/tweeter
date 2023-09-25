@@ -5,10 +5,8 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import Link from 'next/link'
 import axios from 'axios'
 import { signIn } from 'next-auth/react'
-import { User } from '@prisma/client'
 import { showSignUpError } from '@/lib/helpers'
 import { useRouter } from 'next/navigation'
-
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import {
@@ -19,19 +17,16 @@ import {
     CardHeader,
     CardTitle,
 } from '@/components/ui/card'
+import { Loader2 } from 'lucide-react'
+import { useToast } from '@/components/ui/use-toast'
+
 import {
-    SignInForm,
-    SignUpForm,
+    type SignInForm,
+    type SignUpForm,
     signInSchema,
     signUpSchema,
 } from '@/validations/zod-validations'
-import { Loader2 } from 'lucide-react'
-import { useToast } from '@/components/ui/use-toast'
-// import { UploadButton, UploadDropzone } from '@/utils/uploadthing'
-// import '@uploadthing/react/styles.css'
-
-// import { useDropzone } from 'react-dropzone'
-// import { useCallback } from 'react'
+import type { User } from '@prisma/client'
 
 type Props = {
     authType: 'sign-in' | 'sign-up'
@@ -116,7 +111,7 @@ export default function Auth({ authType }: Props) {
     return (
         <form
             onSubmit={handleSubmit(onSubmit)}
-            className='min-h-screen grid place-content-center'
+            className='grid min-h-screen place-content-center'
         >
             <Card className='max-w-sm'>
                 <CardHeader className='space-y-1'>
@@ -134,13 +129,13 @@ export default function Auth({ authType }: Props) {
                 <CardContent className='grid gap-4'>
                     <div className='relative'>
                         <div className='absolute inset-0 flex items-center'>
-                            <span className='w-full border-t mb-5' />
+                            <span className='w-full mb-5 border-t' />
                         </div>
                     </div>
                     {authType === 'sign-up' && (
                         <>
                             {/* <div
-                                className='w-32 h-32 rounded-full m-auto border mt-5'
+                                className='w-32 h-32 m-auto mt-5 border rounded-full'
                                 {...getRootProps()}
                             > */}
                             {/* <input
@@ -152,7 +147,7 @@ export default function Auth({ authType }: Props) {
 
                             {/* <UploadDropzone
                                 endpoint='profileImageUpload'
-                                className='w-32 h-32 rounded-full m-auto mt-5'
+                                className='w-32 h-32 m-auto mt-5 rounded-full'
                                 content={{
                                     label: 'Upload image',
                                 }}
@@ -223,7 +218,7 @@ export default function Auth({ authType }: Props) {
                 <CardFooter className='flex-col gap-4'>
                     <Button
                         type='submit'
-                        className='w-full flex justify-center items-center gap-2'
+                        className='flex items-center justify-center w-full gap-2'
                         disabled={isSubmitting}
                     >
                         {isSubmitting && <Loader2 className='animate-spin' />}{' '}
@@ -235,7 +230,7 @@ export default function Auth({ authType }: Props) {
                                 {"Don't have an account? "}
                                 <Link
                                     href='/sign-up'
-                                    className='underline text-blue-500'
+                                    className='text-blue-500 underline'
                                 >
                                     Sign up
                                 </Link>
@@ -245,7 +240,7 @@ export default function Auth({ authType }: Props) {
                                 Already have an account?{' '}
                                 <Link
                                     href='/sign-in'
-                                    className='underline text-blue-500'
+                                    className='text-blue-500 underline'
                                 >
                                     Sign in
                                 </Link>

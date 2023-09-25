@@ -1,8 +1,7 @@
-import { type GetServerSidePropsContext } from 'next'
 import {
-    getServerSession,
     type NextAuthOptions,
     type DefaultSession,
+    getServerSession,
     User,
 } from 'next-auth'
 import { PrismaAdapter } from '@next-auth/prisma-adapter'
@@ -88,7 +87,17 @@ export const authOptions: NextAuthOptions = {
         maxAge: 30 * 24 * 60 * 60,
     },
     callbacks: {
-        async jwt({ token, user }) {
+        async jwt({ token, user, trigger, session }) {
+            if (trigger === 'update') {
+                const tokenUser = token.user as User
+
+                tokenUser.email = session.email
+                tokenUser.name = session.name
+                tokenUser.image = session.image
+                tokenUser.bannerImage = session.bannerImage
+
+                return token
+            }
             if (user) {
                 token.user = user
             }

@@ -1,12 +1,13 @@
 'use client'
-import { useRouter } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { Dialog, DialogContent } from '@/components/ui/dialog'
 import { useClickOutside } from '@mantine/hooks'
 import TweetCard from '@/components/cards/tweet-card'
-import { HomeTweet, PartialUser, ProfileTweet } from '@/types/types'
-import { User as SessionUser } from 'next-auth'
-import { User } from '@prisma/client'
 import { ScrollArea } from '../ui/scroll-area'
+
+import type { User as SessionUser } from 'next-auth'
+import type { User } from '@prisma/client'
+import type { HomeTweet, PartialUser, ProfileTweet } from '@/types/types'
 
 type TweetDialogProps = {
     tweet: HomeTweet | ProfileTweet
@@ -20,10 +21,11 @@ export default function TweetDialog({
     user,
 }: TweetDialogProps) {
     const router = useRouter()
-    const ref = useClickOutside<HTMLDivElement>(() => router.back())
+    const pathName = usePathname()
+    const ref = useClickOutside<any>(() => router.back())
 
     return (
-        <Dialog open>
+        <Dialog open={pathName.includes('/tweet/')}>
             <DialogContent
                 ref={ref}
                 className='max-w-3xl max-h-[70vh] overflow-hidden'

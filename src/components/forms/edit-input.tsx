@@ -1,7 +1,8 @@
-import { UserEdit } from '@/validations/zod-validations'
 import React from 'react'
 import { UseFormRegister } from 'react-hook-form'
 import { Input } from '../ui/input'
+
+import type { UserEdit } from '@/validations/zod-validations'
 
 type InputProps = {
     register: UseFormRegister<UserEdit>

@@ -3,18 +3,18 @@
 import {
     Dialog,
     DialogContent,
-    DialogDescription,
     DialogHeader,
     DialogTitle,
     DialogTrigger,
 } from '@/components/ui/dialog'
 import { Separator } from '../ui/separator'
 import FollowCard from '../cards/follow-card'
-import { FollowUser } from '@/types/types'
-import { User } from 'next-auth'
 import { useRouter } from 'next/navigation'
 import { useToast } from '../ui/use-toast'
 import { Fragment } from 'react'
+
+import type { FollowUser } from '@/types/types'
+import type { User } from 'next-auth'
 
 type FollowDialogProps = {
     children: React.ReactNode
@@ -44,7 +44,7 @@ export default function FollowDialog({
             >
                 {children}
             </DialogTrigger>
-            <DialogContent className=' max-w-2xl'>
+            <DialogContent className='max-w-2xl '>
                 <DialogHeader>
                     <DialogTitle className='text-xs font-medium text-darker-gray tracking-base'>
                         {followType === 'following'
@@ -52,23 +52,17 @@ export default function FollowDialog({
                             : `${userName}'s followers`}
                     </DialogTitle>
                     <Separator />
-                    {/* <DialogDescription> */}
                     {follows.map((user) => (
                         <Fragment key={user.id}>
                             <FollowCard
-                                // key={`card-${user.id}`}
                                 user={user}
                                 currentUser={currentUser}
                                 router={router}
                                 toast={toast}
                             />
-                            <Separator
-                                // key={`sep-${user.id}`}
-                                className='last:hidden my-5'
-                            />
+                            <Separator className='my-5 last:hidden' />
                         </Fragment>
                     ))}
-                    {/* </DialogDescription> */}
                 </DialogHeader>
             </DialogContent>
         </Dialog>

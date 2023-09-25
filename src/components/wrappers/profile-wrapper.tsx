@@ -1,11 +1,12 @@
 'use client'
-import { ProfileTweet } from '@/types/types'
-import { User as UserType } from '@prisma/client'
-import { User as SessionUser } from 'next-auth'
 import React from 'react'
 import { ScrollArea } from '../ui/scroll-area'
 import TweetCard from '../cards/tweet-card'
 import { cn } from '@/lib/utils'
+
+import type { ProfileTweet } from '@/types/types'
+import type { User as UserType } from '@prisma/client'
+import type { User as SessionUser } from 'next-auth'
 
 type ProfileWrapperProps = {
     initialTweets: ProfileTweet[]

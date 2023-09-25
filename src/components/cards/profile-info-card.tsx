@@ -4,11 +4,12 @@ import { formatNumber } from '@/lib/helpers'
 import { prisma } from '@/server/db'
 import { redirect } from 'next/navigation'
 import UserBanner from './user-banner'
-import { User } from 'next-auth'
 import FollowDialog from '../dialogs/follow-dialog'
 import FollowBtn from '../buttons/follow-btn'
-import { FollowUser } from '@/types/types'
 import Link from 'next/link'
+
+import type { FollowUser } from '@/types/types'
+import type { User } from 'next-auth'
 
 type ProfileInfoCardProps = {
     currentUser: User
@@ -118,7 +119,7 @@ export default async function ProfileInfoCard({
                     <div className='w-full md:translate-y-0 -translate-y-[9.5rem]'>
                         <div className='flex flex-col items-center justify-between md:flex-row'>
                             <div className='flex flex-col items-center gap-1 md:flex-row md:gap-5 text-darker-gray tracking-base'>
-                                <span className='text-2xl font-semibold text-black'>
+                                <span className='max-w-[230px] sm:max-w-xs text-2xl font-semibold text-black truncate'>
                                     {user.name}
                                 </span>
                                 <div className='flex gap-5'>
@@ -158,15 +159,17 @@ export default async function ProfileInfoCard({
                             </div>
                         </div>
                         <p
-                            className='mt-3 text-lg font-medium text-center text-light-gray line-clamp-3 md:text-left '
+                            className='mt-3 text-lg font-medium text-center text-light-gray line-clamp-3 md:text-left'
                             style={{
                                 // @ts-ignore
                                 textWrap: 'balance',
                             }}
                         >
-                            {user.bio ?? id === currentUser.id
-                                ? 'You have no bio yet. Start editing your profile now.'
-                                : 'This user has no bio yet.'}
+                            {user.bio == null
+                                ? id === currentUser.id
+                                    ? 'You have no bio yet. Start editing your profile now.'
+                                    : 'This user has no bio yet.'
+                                : user.bio}
                         </p>
                         <div className='flex justify-center mt-3 md:hidden'>
                             <FollowBtnWrapper

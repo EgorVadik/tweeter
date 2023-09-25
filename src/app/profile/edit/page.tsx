@@ -7,7 +7,7 @@ export const dynamic = 'force-dynamic'
 
 export default async function page() {
     const session = await getServerAuthSession()
-    if (!session) redirect('/login')
+    if (!session) redirect('/sign-in')
 
     const user = await prisma.user.findUnique({
         where: {
@@ -19,9 +19,10 @@ export default async function page() {
             id: true,
             image: true,
             name: true,
+            bannerImage: true,
         },
     })
-    if (!user) redirect('/login')
+    if (!user) return redirect('/sign-in')
 
     return (
         <main className='flex flex-col items-center justify-center max-w-3xl min-h-screen p-5 m-auto'>

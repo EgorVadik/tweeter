@@ -1,7 +1,7 @@
 import { getServerAuthSession } from '@/server/auth'
 import { prisma } from '@/server/db'
-import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library'
 import { NextResponse } from 'next/server'
+import { PrismaClientKnownRequestError } from '@prisma/client/runtime/library'
 
 export async function POST(req: Request) {
     const { id } = await req.json()

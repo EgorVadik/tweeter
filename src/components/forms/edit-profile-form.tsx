@@ -1,44 +1,60 @@
 'use client'
 
-import Image from 'next/image'
 import { useState } from 'react'
 import EditInput from './edit-input'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { UserEdit, UserEditSchema } from '@/validations/zod-validations'
-import Link from 'next/link'
 import { FaArrowLeft } from 'react-icons/fa'
 import axios, { AxiosError } from 'axios'
 import { useToast } from '@/components/ui/use-toast'
-import { User } from '@prisma/client'
 import { useRouter } from 'next/navigation'
 import { Button } from '../ui/button'
 import { UploadDropzone } from '@/utils/uploadthing'
+import { useSession } from 'next-auth/react'
+
+import type { UserEdit as UserType } from '@/types/types'
+import { type UserEdit, UserEditSchema } from '@/validations/zod-validations'
 
 type EditProfileProps = {
-    user: any
+    user: UserType
 }
 
 export default function EditProfile({ user }: EditProfileProps) {
-    const { register, handleSubmit } = useForm<UserEdit>({
+    const { register, handleSubmit, setValue } = useForm<UserEdit>({
         resolver: zodResolver(UserEditSchema),
+        defaultValues: {
+            name: user.name,
+            email: user.email,
+            bio: user.bio ?? undefined,
+            image: user.image ?? undefined,
+            bannerImage: user.bannerImage ?? undefined,
+        },
     })
     const { toast } = useToast()
     const router = useRouter()
     const [loading, setLoading] = useState(false)
     const [profileImage, setProfileImage] = useState(user.image ?? '')
-    const [bannerImage, setBannerImage] = useState(user.banner ?? '')
+    const [bannerImage, setBannerImage] = useState(user.bannerImage ?? '')
+    const { update } = useSession()
 
     const onSubmit = async (data: UserEdit) => {
         setLoading(true)
         try {
-            const res = await axios.put('/api/user/edit', data)
+            const res = await axios.put('/api/profile/edit', data)
             if (res.status === 200) {
                 toast({
                     title: 'Success',
                     description: 'Your profile has been updated',
                 })
-                router.push('/profile')
+
+                const newSession = await update({
+                    name: data.name,
+                    email: data.email,
+                    image: data.image,
+                    bannerImage: data.bannerImage,
+                })
+
+                router.back()
                 router.refresh()
             }
         } catch (error) {
@@ -50,27 +66,35 @@ export default function EditProfile({ user }: EditProfileProps) {
                     })
                 }
 
-                if (error.response?.status === 400) {
-                    toast({
-                        title: 'Error',
-                        description: 'Something went wrong',
-                    })
-                }
+                toast({
+                    title: 'Error',
+                    description: 'Something went wrong',
+                })
             }
         } finally {
             setLoading(false)
         }
     }
 
+    const handleImageUpload = (url: string) => {
+        setProfileImage(url)
+        setValue('image', url)
+    }
+
+    const handleBannerUpload = (url: string) => {
+        setBannerImage(url)
+        setValue('bannerImage', url)
+    }
+
     return (
-        <div className='w-full space-y-3'>
-            <Link href='..' className='flex items-center gap-2'>
+        <div className='w-full mb-10 space-y-3 sm:mb-0'>
+            <button onClick={router.back} className='flex items-center gap-2'>
                 <FaArrowLeft />
                 Back
-            </Link>
+            </button>
             <form
                 onSubmit={handleSubmit(onSubmit)}
-                className='px-10 py-5 border border-light-gray rounded-xl'
+                className='px-3 py-5 border sm:px-10 border-light-gray rounded-xl'
             >
                 <div>
                     <h2 className='text-2xl tracking-[-0.84px]'>
@@ -78,41 +102,16 @@ export default function EditProfile({ user }: EditProfileProps) {
                     </h2>
                 </div>
                 <div className='flex items-center justify-center gap-4 my-7'>
-                    <UploadDropzone
-                        endpoint='editProfileImages'
-                        onClientUploadComplete={(res) => {
-                            if (!res) return
-                            setProfileImage(res[0].url)
-                        }}
-                        className='py-3 border-light-gray bg-[url()]'
-                        appearance={{
-                            uploadIcon: {
-                                visibility: 'hidden',
-                            },
-                        }}
-                        content={{
-                            label: 'Upload Profile Image',
-                            allowedContent: 'Max 4MB',
-                        }}
-                        config={{
-                            mode: 'auto',
-                        }}
-                    />
-                    <UploadDropzone
-                        endpoint='editProfileImages'
-                        onClientUploadComplete={(res) => {
-                            if (!res) return
-                            setBannerImage(res[0].url)
-                        }}
-                        className='py-3 border-light-gray'
-                        content={{
-                            label: 'Upload Profile Banner',
-                            allowedContent: 'Max 4MB',
-                        }}
-                        config={{
-                            mode: 'auto',
-                        }}
-                    />
+                    {UploadImage(
+                        profileImage,
+                        handleImageUpload,
+                        'Upload Profile Image'
+                    )}
+                    {UploadImage(
+                        bannerImage,
+                        handleBannerUpload,
+                        'Upload Banner Image'
+                    )}
                 </div>
                 <div className='space-y-5'>
                     <EditInput
@@ -147,5 +146,44 @@ export default function EditProfile({ user }: EditProfileProps) {
                 </div>
             </form>
         </div>
+    )
+}
+
+function UploadImage(
+    profileImage: string,
+    setImage: (url: string) => void,
+    label: string
+) {
+    return (
+        <UploadDropzone
+            data-img={profileImage}
+            endpoint='editProfileImages'
+            onClientUploadComplete={(res) => {
+                if (!res) return
+                setImage(res[0].url)
+            }}
+            className='w-48 h-48 py-3 bg-center bg-cover cursor-pointer border-light-gray sm:whitespace-nowrap'
+            appearance={{
+                container: {
+                    backgroundImage: `url("${profileImage}")`,
+                },
+                uploadIcon: {
+                    visibility: 'hidden',
+                },
+                allowedContent: {
+                    display: profileImage ? 'none' : 'block',
+                },
+                label: {
+                    display: profileImage ? 'none' : 'block',
+                },
+            }}
+            content={{
+                label,
+                allowedContent: 'Max 4MB',
+            }}
+            config={{
+                mode: 'auto',
+            }}
+        />
     )
 }

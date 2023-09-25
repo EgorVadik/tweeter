@@ -22,16 +22,6 @@ export async function GET() {
             tweet: {
                 include: {
                     ...TWEET_OPTIONS,
-                    // savedTweets: {
-                    //     select: {
-                    //         userId: true,
-                    //     },
-                    // },
-                    // _count: {
-                    //     select: {
-                    //         replies: true,
-                    //     },
-                    // },
                 },
             },
         },

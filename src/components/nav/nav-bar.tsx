@@ -20,7 +20,7 @@ export default async function NavBar() {
                     width={130}
                 />
             </Link>
-            <ul className='items-center hidden gap-10 sm:flex'>
+            <ul className='items-center hidden gap-5 lg:gap-10 sm:flex'>
                 <NavItem href='/' text='Home' />
                 <NavItem href='/explore' text='Explore' />
                 <NavItem href='/bookmarks' text='Bookmarks' />
@@ -33,7 +33,7 @@ export default async function NavBar() {
                                 name={session.user.name}
                                 image={session.user.image ?? undefined}
                             />
-                            <span className='hidden sm:inline'>
+                            <span className='hidden sm:block max-w-[100px] whitespace-nowrap truncate'>
                                 {session.user.name}
                             </span>
                             <ChevronDown

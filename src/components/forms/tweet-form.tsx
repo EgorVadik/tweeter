@@ -1,7 +1,6 @@
 'use client'
 
 import { Separator } from '@/components/ui/separator'
-import { User } from 'next-auth'
 import { MdPublic, MdPeople } from 'react-icons/md'
 import { Button } from '@/components/ui/button'
 import PrivateReplyDropdown from '@/components/dropdowns/private-reply-dropdown'
@@ -10,13 +9,18 @@ import { useForm } from 'react-hook-form'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { createTweet } from '@/lib/api-client'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { NewTweetForm, newTweetSchema } from '@/validations/zod-validations'
 import { useToast } from '@/components/ui/use-toast'
 import { Loader2 } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { usePathname } from 'next/navigation'
 import UploadBtn from '../buttons/upload-btn'
 import ImagePreviewCard from '../cards/image-preview-card'
+
+import {
+    type NewTweetForm,
+    newTweetSchema,
+} from '@/validations/zod-validations'
+import { User } from 'next-auth'
 
 type TweetFormProps = {
     user: User

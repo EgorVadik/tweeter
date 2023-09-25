@@ -5,7 +5,7 @@ import * as DialogPrimitive from '@radix-ui/react-dialog'
 import { X } from 'lucide-react'
 
 import { cn } from '@/lib/utils'
-import { useRouter } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 
 const Dialog = DialogPrimitive.Root
 
@@ -39,6 +39,7 @@ const DialogContent = React.forwardRef<
     React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content>
 >(({ className, children, ...props }, ref) => {
     const router = useRouter()
+    const pathName = usePathname()
     return (
         <DialogPortal>
             <DialogOverlay />
@@ -52,7 +53,7 @@ const DialogContent = React.forwardRef<
             >
                 {children}
                 <DialogPrimitive.Close
-                    onClick={() => router.back()}
+                    onClick={() => pathName.includes('tweet') && router.back()}
                     className='absolute right-4 top-4 rounded-sm opacity-70 ring-offset-white transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-stone-950 focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-stone-100 data-[state=open]:text-stone-500 dark:ring-offset-stone-950 dark:focus:ring-stone-300 dark:data-[state=open]:bg-stone-800 dark:data-[state=open]:text-stone-400'
                 >
                     <X className='w-4 h-4' />

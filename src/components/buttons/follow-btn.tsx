@@ -26,7 +26,7 @@ export default function FollowBtn({
             ref={ref}
             {...props}
             onClick={() => setFollowUser(uid, followType, router, toast)}
-            className='bg-primary-blue text-white px-5 py-2 rounded font-semibold text-sm'
+            className='px-5 py-2 text-sm font-semibold text-white rounded bg-primary-blue'
         >
             {followType === 'Unfollow'
                 ? hovered

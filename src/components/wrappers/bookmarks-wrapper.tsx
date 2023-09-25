@@ -1,7 +1,5 @@
 'use client'
 
-import { BookmarkedTweet } from '@/types/types'
-import { User } from 'next-auth'
 import React from 'react'
 import { ScrollArea } from '../ui/scroll-area'
 import TweetCard from '../cards/tweet-card'
@@ -9,6 +7,9 @@ import { cn } from '@/lib/utils'
 import { usePathname } from 'next/navigation'
 import { useQuery } from '@tanstack/react-query'
 import { getBookmarks } from '@/lib/api-client'
+
+import type { User } from 'next-auth'
+import type { BookmarkedTweet } from '@/types/types'
 
 type BookmarksWrapperProps = {
     initialTweets: BookmarkedTweet[]

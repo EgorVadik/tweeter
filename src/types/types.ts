@@ -68,3 +68,13 @@ export interface UserToFollow extends PartialUser {
         followers: number
     }
 }
+
+export type UserSearch = Omit<UserToFollow, 'bannerImage'> & {
+    followersIds?: string[]
+}
+
+export interface UserEdit extends PartialUser {
+    bio: string | null
+    email: string
+    bannerImage: string | null
+}

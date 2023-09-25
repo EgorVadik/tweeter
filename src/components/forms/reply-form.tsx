@@ -1,22 +1,23 @@
 'use client'
 
-import { User } from 'next-auth'
 import UserAvatar from '../cards/user-avatar'
 import { Input } from '../ui/input'
-import { MdOutlineImage } from 'react-icons/md'
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { NewReplyForm, newReplySchema } from '@/validations/zod-validations'
 import UploadBtn from '../buttons/upload-btn'
 import { useToast } from '../ui/use-toast'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { usePathname } from 'next/navigation'
 import { createReply } from '@/lib/api-client'
-import Image from 'next/image'
-import { Progress } from '../ui/progress'
 import ImagePreviewCard from '../cards/image-preview-card'
 import { Loader2 } from 'lucide-react'
+
+import {
+    type NewReplyForm,
+    newReplySchema,
+} from '@/validations/zod-validations'
+import type { User } from 'next-auth'
 
 type ReplyFormProps = {
     user: User
@@ -87,7 +88,7 @@ export default function ReplyForm({
     return (
         <form
             onSubmit={handleSubmit(onSubmit)}
-            className='flex flex-col items-end gap-3 mt-3 relative'
+            className='relative flex flex-col items-end gap-3 mt-3'
         >
             <div className='flex w-full gap-3'>
                 <UserAvatar name={user.name} image={user.image ?? undefined} />
@@ -98,7 +99,7 @@ export default function ReplyForm({
                     disabled={isLoading}
                 />
 
-                <div className='absolute right-2 top-2 text-gray cursor-pointer'>
+                <div className='absolute cursor-pointer right-2 top-2 text-gray'>
                     <UploadBtn
                         setImageUrl={setImageUrl}
                         setUploadProgress={setUploadProgress}

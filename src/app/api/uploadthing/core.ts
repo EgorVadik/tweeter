@@ -1,7 +1,6 @@
-import { prisma } from '@/server/db'
-import { User } from 'next-auth'
 import { getToken } from 'next-auth/jwt'
 import { createUploadthing, type FileRouter } from 'uploadthing/next'
+import type { User } from 'next-auth'
 
 const f = createUploadthing()
 

@@ -1,7 +1,6 @@
 import { getTweets } from '@/lib/helpers'
 import { getServerAuthSession } from '@/server/auth'
-import { prisma } from '@/server/db'
-import { NextResponse, NextRequest } from 'next/server'
+import { NextResponse } from 'next/server'
 
 export async function GET(request: Request) {
     const session = await getServerAuthSession()

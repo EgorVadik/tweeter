@@ -1,6 +1,6 @@
+import axios from 'axios'
 import type { BookmarkedTweet, HomeTweet } from '@/types/types'
 import type { NewReplyForm, NewTweetForm } from '@/validations/zod-validations'
-import axios from 'axios'
 
 export const createTweet = async (tweet: NewTweetForm) => {
     const response = await axios.post('/api/tweets/home', tweet)

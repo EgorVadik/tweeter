@@ -4,8 +4,6 @@ import React, { useState } from 'react'
 import TweetForm from '../forms/tweet-form'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import TweetCard from '../cards/tweet-card'
-import { User as SessionUser } from 'next-auth'
-import { HomeTweet, UserToFollow } from '@/types/types'
 import { useQuery } from '@tanstack/react-query'
 import { getTweets } from '@/lib/api-client'
 import { useIntersection } from '@mantine/hooks'
@@ -14,6 +12,9 @@ import { cn } from '@/lib/utils'
 import { usePathname } from 'next/navigation'
 import { Separator } from '../ui/separator'
 import WhoToFollowCard from '../cards/who-to-follow-card'
+
+import type { User as SessionUser } from 'next-auth'
+import type { HomeTweet, UserToFollow } from '@/types/types'
 
 type HomeWrapperProps = {
     user: SessionUser

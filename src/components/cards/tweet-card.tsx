@@ -14,7 +14,7 @@ import {
 import ReplyForm from '../forms/reply-form'
 import { useState } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { usePathname, useRouter } from 'next/navigation'
+import { usePathname } from 'next/navigation'
 import { useToast } from '@/components/ui/use-toast'
 import { handleTweetActions } from '@/lib/api-client'
 import { Loader2 } from 'lucide-react'
@@ -41,8 +41,6 @@ export default function TweetCard({
     const [commentFocus, setCommentFocus] = useState(false)
     const { toast } = useToast()
     const pathName = usePathname()
-
-    const router = useRouter()
 
     const queryClient = useQueryClient()
     const { mutate, isLoading } = useMutation({
@@ -106,31 +104,11 @@ export default function TweetCard({
             )}
             <Link
                 href={`/profile/${user.id}`}
-                className='flex items-center gap-2 w-fit hover:bg-black/10 duration-300 rounded-lg p-1 relative z-20'
-                onClick={
-                    pathName.includes('/tweet/')
-                        ? async (e) => {
-                              e.preventDefault()
-                              const replacePromise = new Promise((resolve) => {
-                                  resolve(router.replace(`/profile/${user.id}`))
-                              })
-                              await replacePromise
-
-                              const backPromise = new Promise((resolve) => {
-                                  resolve(router.back())
-                              })
-                              await backPromise
-
-                              //   router.back()
-                              //   router.replace(`/profile/${user.id}`)
-                              //   router.refresh()
-                          }
-                        : undefined
-                }
+                className='relative z-20 flex items-center gap-2 p-1 duration-300 rounded-lg w-fit hover:bg-black/10'
             >
                 <UserAvatar name={user.name} image={user.image ?? undefined} />
                 <div className='flex flex-col'>
-                    <span className='text-black tracking-base font-medium'>
+                    <span className='font-medium text-black tracking-base max-w-[130px] sm:max-w-xs truncate'>
                         {user.name}
                     </span>
                     <span className='text-xs text-light-gray'>
@@ -138,7 +116,7 @@ export default function TweetCard({
                     </span>
                 </div>
             </Link>
-            <p className='text-dark-gray tracking-base mt-3 p-1'>
+            <p className='p-1 mt-3 text-dark-gray tracking-base'>
                 {tweet.text}
             </p>
             {tweet.image && (
@@ -148,12 +126,12 @@ export default function TweetCard({
                         alt={tweet.text}
                         width={500}
                         height={500}
-                        className='rounded-md w-fit max-h-80 object-cover mx-auto'
+                        className='object-cover mx-auto rounded-md w-fit max-h-80'
                     />
                 </div>
             )}
 
-            <div className='flex items-center justify-end gap-4 text-xs font-medium tracking-base my-3 text-gray'>
+            <div className='flex items-center justify-end gap-4 my-3 text-xs font-medium tracking-base text-gray'>
                 <p>
                     {formatNumber(tweet._count.replies)} <span>Replies</span>
                 </p>
@@ -168,7 +146,7 @@ export default function TweetCard({
             </div>
 
             <Separator className='bg-lighter-gray' />
-            <div className='flex items-center justify-evenly py-1 relative z-20'>
+            <div className='relative z-20 flex items-center py-1 justify-evenly'>
                 <TweetActionBtn
                     onClick={() => setCommentFocus((prev) => !prev)}
                 >
@@ -182,7 +160,7 @@ export default function TweetCard({
                     }`}
                     disabled={isLoading}
                 >
-                    {isLoading && <Loader2 className='animate-spin text-xl' />}
+                    {isLoading && <Loader2 className='text-xl animate-spin' />}
                     <MdLoop className='text-xl' />
                     <span className='hidden md:inline'>
                         {userIn(tweet.retweets) ? 'Retweeted' : 'Retweet'}
@@ -193,7 +171,7 @@ export default function TweetCard({
                     className={`${userIn(tweet.likes) && 'text-light-red'}`}
                     disabled={isLoading}
                 >
-                    {isLoading && <Loader2 className='animate-spin text-xl' />}
+                    {isLoading && <Loader2 className='text-xl animate-spin' />}
                     <MdFavoriteBorder className='text-xl' />
                     <span className='hidden md:inline'>
                         {userIn(tweet.likes) ? 'Liked' : 'Like'}
@@ -205,7 +183,7 @@ export default function TweetCard({
                         userIn(tweet.savedTweets) && 'text-secondary-blue'
                     }`}
                 >
-                    {isLoading && <Loader2 className='animate-spin text-xl' />}
+                    {isLoading && <Loader2 className='text-xl animate-spin' />}
                     <MdBookmarkBorder className='text-xl' />
                     <span className='hidden md:inline'>
                         {userIn(tweet.savedTweets) ? 'Saved' : 'Save'}
@@ -228,7 +206,7 @@ export default function TweetCard({
                     user={currentUser}
                 />
             )}
-            <Separator className='bg-lighter-gray mb-5' />
+            <Separator className='mb-5 bg-lighter-gray' />
             {tweet.replies.map((reply) => (
                 <ReplyCard
                     key={reply.id}

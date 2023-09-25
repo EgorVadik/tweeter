@@ -12,7 +12,8 @@ import { IoMdSettings } from 'react-icons/io'
 import { MdExitToApp } from 'react-icons/md'
 import { signOut } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
-import { User } from 'next-auth'
+
+import type { User } from 'next-auth'
 
 export default function ProfileDropdown({
     children,
@@ -26,21 +27,24 @@ export default function ProfileDropdown({
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>{children}</DropdownMenuTrigger>
-            <DropdownMenuContent className='rounded-xl p-2'>
+            <DropdownMenuContent className='p-2 rounded-xl'>
                 <DropdownMenuItem
-                    className='flex gap-2 items-center text-dark-gray px-4 py-3 rounded-lg'
+                    className='flex items-center gap-2 px-4 py-3 rounded-lg text-dark-gray'
                     onClick={() => router.push(`/profile/${currentUser.id}`)}
                 >
                     <FaUserCircle className='text-2xl' />
                     <span>My Profile</span>
                 </DropdownMenuItem>
-                <DropdownMenuItem className='flex gap-2 items-center text-darker-gray px-4 py-3 rounded-lg'>
+                <DropdownMenuItem
+                    className='flex items-center gap-2 px-4 py-3 rounded-lg text-darker-gray'
+                    onClick={() => router.push('/profile/edit')}
+                >
                     <IoMdSettings className='text-2xl' />
                     <span>Settings</span>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
-                    className='flex gap-2 items-center text-light-red px-4 py-3 rounded-lg'
+                    className='flex items-center gap-2 px-4 py-3 rounded-lg text-light-red'
                     onClick={async () => await signOut()}
                 >
                     <MdExitToApp className='text-2xl' />

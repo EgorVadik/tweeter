@@ -1,14 +1,15 @@
 'use client'
 
 import React from 'react'
-import { HomeTweet } from '@/types/types'
-import { User as SessionUser } from 'next-auth'
 import { ScrollArea } from '../ui/scroll-area'
 import { cn } from '@/lib/utils'
 import TweetCard from '../cards/tweet-card'
 import { useQuery } from '@tanstack/react-query'
 import { usePathname } from 'next/navigation'
 import { getExplore } from '@/lib/api-client'
+
+import type { User as SessionUser } from 'next-auth'
+import type { HomeTweet } from '@/types/types'
 
 type ExploreWrapperProps = {
     user: SessionUser
