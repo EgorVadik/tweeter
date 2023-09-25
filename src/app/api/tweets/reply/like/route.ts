@@ -17,26 +17,26 @@ export async function POST(req: Request) {
         return NextResponse.json({ message: 'Unauthorized' }, { status: 401 })
 
     try {
-        const like = await prisma.like.create({
+        const replyLike = await prisma.replyLike.create({
             data: {
-                tweetId: id,
+                replyId: id,
                 userId: session.user.id,
             },
         })
 
-        return NextResponse.json({ like }, { status: 201 })
+        return NextResponse.json({ replyLike }, { status: 201 })
     } catch (error) {
         if (error instanceof PrismaClientKnownRequestError) {
             if (error.code === 'P2002') {
-                const like = await prisma.like.delete({
+                const replyLike = await prisma.replyLike.delete({
                     where: {
-                        userId_tweetId: {
-                            tweetId: id,
+                        userId_replyId: {
+                            replyId: id,
                             userId: session.user.id,
                         },
                     },
                 })
-                return NextResponse.json({ like }, { status: 200 })
+                return NextResponse.json({ replyLike }, { status: 200 })
             }
         }
 

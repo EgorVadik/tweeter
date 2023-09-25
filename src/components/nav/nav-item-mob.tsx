@@ -5,22 +5,22 @@ import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
 type Props = {
+    children: React.ReactNode
     href: string
-    text: string
 }
 
 function CurrentlyOn({ className }: { className?: string }) {
     return (
         <div
             className={cn(
-                `absolute right-0 left-0 bottom-0 bg-primary-blue h-[6px] rounded-t`,
+                `absolute right-0 left-0 -bottom-[6px] bg-primary-blue h-[3px] rounded-t`,
                 className
             )}
         />
     )
 }
 
-export default function NavItem({ href, text }: Props) {
+export default function NavItemMob({ children, href }: Props) {
     const pathname = usePathname()
 
     const isCurrentlyOn =
@@ -32,15 +32,12 @@ export default function NavItem({ href, text }: Props) {
         <Link
             href={href}
             className={cn(
-                `tracking-base font-sm text-light-gray font-medium group hover:text-primary-blue duration-300`,
-                isCurrentlyOn && 'text-primary-blue font-semibold'
+                'relative flex items-center justify-center w-full py-2 mx-4 duration-300 rounded-lg hover:bg-lighter-gray',
+                isCurrentlyOn ? 'text-primary-blue' : 'text-light-gray'
             )}
         >
-            <li className='relative px-5 py-5'>
-                {text}
-                {isCurrentlyOn && <CurrentlyOn />}
-                <CurrentlyOn className='duration-300 opacity-0 group-hover:opacity-100' />
-            </li>
+            {children}
+            {isCurrentlyOn && <CurrentlyOn />}
         </Link>
     )
 }

@@ -12,8 +12,8 @@ export default function BookmarksLayout({
     children: React.ReactNode
 }) {
     return (
-        <main className='container pt-5'>
-            <div className='flex lg:flex-row flex-col gap-5'>
+        <main className='px-4 pt-5 sm:container'>
+            <div className='flex flex-col gap-5 lg:flex-row'>
                 <ProfileSideNav
                     navItems={[
                         { text: 'Top', href: '/bookmarks' },

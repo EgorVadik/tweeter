@@ -3,6 +3,7 @@ import { getServerAuthSession } from '@/server/auth'
 import { prisma } from '@/server/db'
 import { redirect } from 'next/navigation'
 import React from 'react'
+import { PROFILE_TWEETS_OPTIONS } from '@/lib/constants'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -20,50 +21,7 @@ export default async function page({
         include: {
             tweets: {
                 include: {
-                    likes: {
-                        select: {
-                            userId: true,
-                        },
-                    },
-                    retweets: {
-                        select: {
-                            userId: true,
-                        },
-                    },
-                    replies: {
-                        select: {
-                            id: true,
-                            text: true,
-                            createdAt: true,
-                            image: true,
-                            replyLikes: {
-                                select: {
-                                    userId: true,
-                                },
-                            },
-                            user: {
-                                select: {
-                                    id: true,
-                                    name: true,
-                                    image: true,
-                                },
-                            },
-                        },
-                        orderBy: {
-                            createdAt: 'desc',
-                        },
-                        take: 2,
-                    },
-                    savedTweets: {
-                        select: {
-                            userId: true,
-                        },
-                    },
-                    _count: {
-                        select: {
-                            replies: true,
-                        },
-                    },
+                    ...PROFILE_TWEETS_OPTIONS,
                 },
                 orderBy: {
                     createdAt: 'desc',

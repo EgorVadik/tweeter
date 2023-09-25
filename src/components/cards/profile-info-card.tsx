@@ -8,6 +8,7 @@ import { User } from 'next-auth'
 import FollowDialog from '../dialogs/follow-dialog'
 import FollowBtn from '../buttons/follow-btn'
 import { FollowUser } from '@/types/types'
+import Link from 'next/link'
 
 type ProfileInfoCardProps = {
     currentUser: User
@@ -26,7 +27,7 @@ const FollowCount = ({
     count: number
     followType: 'Following' | 'Followers'
 }) => (
-    <span className='text-xs text-light-gray space-x-1'>
+    <span className='space-x-1 text-xs text-light-gray'>
         <span className='font-semibold text-darker-gray'>
             {formatNumber(count)}
         </span>
@@ -42,9 +43,11 @@ const FollowBtnWrapper = ({
     user: FollowUser
 } & WrapperProps) => {
     return id === currentUserId ? (
-        <Button className='bg-primary-blue text-white px-5 py-2 rounded font-semibold text-sm'>
-            Edit profile
-        </Button>
+        <Link href={'/profile/edit'}>
+            <Button className='px-5 py-2 text-sm font-semibold text-white rounded bg-primary-blue'>
+                Edit profile
+            </Button>
+        </Link>
     ) : (
         <FollowBtn
             followType={
@@ -97,10 +100,10 @@ export default async function ProfileInfoCard({
     return (
         <>
             <UserBanner bannerImg={user.bannerImage} />
-            <div className='bg-white rounded-xl shadow-card-shadow p-5 md:max-h-40 max-h-72 -translate-y-12 max-w-[1108px]'>
-                <div className='flex md:flex-row flex-col md:items-start items-center gap-7'>
-                    <div className='bg-white rounded-lg p-1 md:-translate-y-16 -translate-y-32 shadow-card-shadow relative'>
-                        <Avatar className='w-36 h-36 rounded-lg'>
+            <div className='bg-white rounded-xl shadow-card-shadow p-5 md:max-h-40 max-h-72 -translate-y-12 max-w-[1108px] mx-auto'>
+                <div className='flex flex-col items-center md:flex-row md:items-start gap-7'>
+                    <div className='relative p-1 -translate-y-32 bg-white rounded-lg md:-translate-y-16 shadow-card-shadow'>
+                        <Avatar className='rounded-lg w-36 h-36'>
                             <AvatarImage
                                 className='rounded-lg'
                                 src={user.image ?? undefined}
@@ -113,9 +116,9 @@ export default async function ProfileInfoCard({
                         </Avatar>
                     </div>
                     <div className='w-full md:translate-y-0 -translate-y-[9.5rem]'>
-                        <div className='flex md:flex-row flex-col justify-between items-center'>
-                            <div className='flex md:flex-row flex-col md:gap-5 gap-1 items-center text-darker-gray tracking-base'>
-                                <span className='text-black font-semibold text-2xl'>
+                        <div className='flex flex-col items-center justify-between md:flex-row'>
+                            <div className='flex flex-col items-center gap-1 md:flex-row md:gap-5 text-darker-gray tracking-base'>
+                                <span className='text-2xl font-semibold text-black'>
                                     {user.name}
                                 </span>
                                 <div className='flex gap-5'>
@@ -146,7 +149,7 @@ export default async function ProfileInfoCard({
                                     </FollowDialog>
                                 </div>
                             </div>
-                            <div className='md:block hidden'>
+                            <div className='hidden md:block'>
                                 <FollowBtnWrapper
                                     id={id}
                                     currentUserId={currentUser.id}
@@ -155,7 +158,7 @@ export default async function ProfileInfoCard({
                             </div>
                         </div>
                         <p
-                            className='mt-3 font-medium text-lg text-light-gray line-clamp-3 text-center md:text-left '
+                            className='mt-3 text-lg font-medium text-center text-light-gray line-clamp-3 md:text-left '
                             style={{
                                 // @ts-ignore
                                 textWrap: 'balance',
@@ -165,7 +168,7 @@ export default async function ProfileInfoCard({
                                 ? 'You have no bio yet. Start editing your profile now.'
                                 : 'This user has no bio yet.'}
                         </p>
-                        <div className='md:hidden flex justify-center mt-3'>
+                        <div className='flex justify-center mt-3 md:hidden'>
                             <FollowBtnWrapper
                                 id={id}
                                 currentUserId={currentUser.id}

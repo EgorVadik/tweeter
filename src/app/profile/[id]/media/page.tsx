@@ -2,6 +2,10 @@ import ProfileWrapper from '@/components/wrappers/profile-wrapper'
 import { getServerAuthSession } from '@/server/auth'
 import { prisma } from '@/server/db'
 import { redirect } from 'next/navigation'
+import {
+    PROFILE_TWEETS_OPTIONS,
+    PROFILE_FOLLOWS_OPTIONS,
+} from '@/lib/constants'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
@@ -17,22 +21,7 @@ export default async function page({
             id,
         },
         include: {
-            followers: {
-                select: {
-                    id: true,
-                    name: true,
-                    image: true,
-                    bio: true,
-                },
-            },
-            following: {
-                select: {
-                    id: true,
-                    name: true,
-                    image: true,
-                    bio: true,
-                },
-            },
+            ...PROFILE_FOLLOWS_OPTIONS,
             tweets: {
                 where: {
                     image: {
@@ -40,50 +29,7 @@ export default async function page({
                     },
                 },
                 include: {
-                    likes: {
-                        select: {
-                            userId: true,
-                        },
-                    },
-                    retweets: {
-                        select: {
-                            userId: true,
-                        },
-                    },
-                    replies: {
-                        select: {
-                            id: true,
-                            text: true,
-                            createdAt: true,
-                            image: true,
-                            replyLikes: {
-                                select: {
-                                    userId: true,
-                                },
-                            },
-                            user: {
-                                select: {
-                                    id: true,
-                                    name: true,
-                                    image: true,
-                                },
-                            },
-                        },
-                        orderBy: {
-                            createdAt: 'desc',
-                        },
-                        take: 2,
-                    },
-                    savedTweets: {
-                        select: {
-                            userId: true,
-                        },
-                    },
-                    _count: {
-                        select: {
-                            replies: true,
-                        },
-                    },
+                    ...PROFILE_TWEETS_OPTIONS,
                 },
                 orderBy: {
                     createdAt: 'desc',

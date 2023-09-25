@@ -40,7 +40,7 @@ export default function BookmarksWrapper({
         <>
             <ScrollArea
                 className={cn(
-                    'h-[calc(100vh-100px)] lg:max-w-3xl w-full rounded-lg'
+                    'sm:pb-0 pb-14 h-[calc(100vh-100px)] lg:max-w-3xl w-full rounded-lg'
                 )}
             >
                 {data?.map((tweet) => (

@@ -76,3 +76,8 @@ export const getBookmarks = async (
 
     return bookmarkedTweets
 }
+
+export const toggleReplyLike = async (id: string) => {
+    const response = await axios.post('/api/tweets/reply/like', { id })
+    return response.data
+}

@@ -14,6 +14,7 @@ import { FollowUser } from '@/types/types'
 import { User } from 'next-auth'
 import { useRouter } from 'next/navigation'
 import { useToast } from '../ui/use-toast'
+import { Fragment } from 'react'
 
 type FollowDialogProps = {
     children: React.ReactNode
@@ -51,20 +52,23 @@ export default function FollowDialog({
                             : `${userName}'s followers`}
                     </DialogTitle>
                     <Separator />
-                    <DialogDescription>
-                        {follows.map((user) => (
-                            <>
-                                <FollowCard
-                                    key={user.id}
-                                    user={user}
-                                    currentUser={currentUser}
-                                    router={router}
-                                    toast={toast}
-                                />
-                                <Separator className='last:hidden my-5' />
-                            </>
-                        ))}
-                    </DialogDescription>
+                    {/* <DialogDescription> */}
+                    {follows.map((user) => (
+                        <Fragment key={user.id}>
+                            <FollowCard
+                                // key={`card-${user.id}`}
+                                user={user}
+                                currentUser={currentUser}
+                                router={router}
+                                toast={toast}
+                            />
+                            <Separator
+                                // key={`sep-${user.id}`}
+                                className='last:hidden my-5'
+                            />
+                        </Fragment>
+                    ))}
+                    {/* </DialogDescription> */}
                 </DialogHeader>
             </DialogContent>
         </Dialog>

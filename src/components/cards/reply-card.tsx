@@ -1,9 +1,17 @@
-import { Reply } from '@/types/types'
+'use client'
+
 import React from 'react'
 import UserAvatar from './user-avatar'
 import { formatDate, formatNumber } from '@/lib/helpers'
 import { MdFavoriteBorder } from 'react-icons/md'
 import Image from 'next/image'
+import { usePathname } from 'next/navigation'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { toggleReplyLike } from '@/lib/api-client'
+import { useToast } from '../ui/use-toast'
+
+import { AxiosError } from 'axios'
+import type { Reply } from '@/types/types'
 
 type ReplyCardProps = {
     reply: Reply
@@ -11,6 +19,51 @@ type ReplyCardProps = {
 }
 
 export default function ReplyCard({ reply, currentUserId }: ReplyCardProps) {
+    const pathName = usePathname()
+    const queryClient = useQueryClient()
+    const { toast } = useToast()
+    const { mutate } = useMutation({
+        mutationFn: toggleReplyLike,
+        onSuccess: () => {
+            queryClient.invalidateQueries(['tweets', pathName], {
+                exact: true,
+            })
+        },
+        onError: (err) => {
+            if (err instanceof AxiosError) {
+                switch (err.response?.status) {
+                    case 400:
+                        toast({
+                            title: 'Invalid tweet id',
+                            description: 'The tweet id is invalid',
+                        })
+                        break
+
+                    case 401:
+                        toast({
+                            title: 'Unauthorized',
+                            description: 'You are not authorized',
+                        })
+                        break
+
+                    case 419:
+                        toast({
+                            title: 'Already retweeted',
+                            description: 'You already retweeted this tweet',
+                        })
+                        break
+
+                    default:
+                        toast({
+                            title: 'Error',
+                            description: 'Something went wrong',
+                        })
+                        break
+                }
+            }
+        },
+    })
+
     const isLiked = reply.replyLikes.some(
         (like) => like.userId === currentUserId
     )
@@ -50,12 +103,13 @@ export default function ReplyCard({ reply, currentUserId }: ReplyCardProps) {
                     </div>
                     <div className='flex items-center gap-5 text-xs text-gray font-semibold tracking-base'>
                         <button
+                            onClick={() => mutate(reply.id)}
                             className={`flex items-center gap-1 hover:text-light-red duration-200 ${
                                 isLiked ? 'text-light-red' : ''
                             }`}
                         >
                             <MdFavoriteBorder />
-                            <span>Liked</span>
+                            <span>{isLiked ? 'Liked' : 'Like'}</span>
                         </button>
                         <span>
                             {formatNumber(reply.replyLikes.length)} Likes

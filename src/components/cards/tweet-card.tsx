@@ -1,7 +1,6 @@
 'use client'
 
 import { formatDate, formatNumber } from '@/lib/helpers'
-import { User } from '@prisma/client'
 import Image from 'next/image'
 import TweetActionBtn from '@/components/buttons/tweet-action-btn'
 import { Separator } from '@/components/ui/separator'
@@ -13,22 +12,20 @@ import {
     MdBookmarkBorder,
 } from 'react-icons/md'
 import ReplyForm from '../forms/reply-form'
-import {
-    BookmarkedTweet,
-    HomeTweet,
-    PartialUser,
-    ProfileTweet,
-} from '@/types/types'
-import { User as SessionUser } from 'next-auth'
 import { useState } from 'react'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { handleTweetActions } from '@/lib/api-client'
-import { AxiosError } from 'axios'
+import { usePathname, useRouter } from 'next/navigation'
 import { useToast } from '@/components/ui/use-toast'
+import { handleTweetActions } from '@/lib/api-client'
 import { Loader2 } from 'lucide-react'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
 import ReplyCard from './reply-card'
+import { cn } from '@/lib/utils'
+
+import { AxiosError } from 'axios'
+import type { User } from '@prisma/client'
+import type { HomeTweet, PartialUser, ProfileTweet } from '@/types/types'
+import type { User as SessionUser } from 'next-auth'
 
 type TweetCardProps = {
     tweet: HomeTweet | ProfileTweet
@@ -45,11 +42,16 @@ export default function TweetCard({
     const { toast } = useToast()
     const pathName = usePathname()
 
+    const router = useRouter()
+
     const queryClient = useQueryClient()
     const { mutate, isLoading } = useMutation({
         mutationFn: handleTweetActions,
         onSuccess: () => {
-            queryClient.invalidateQueries(['tweets', pathName], { exact: true })
+            queryClient.invalidateQueries(
+                ['tweets', pathName.includes('/tweet/' ? '/' : pathName)],
+                { exact: true }
+            )
         },
         onError: (err) => {
             if (err instanceof AxiosError) {
@@ -90,10 +92,41 @@ export default function TweetCard({
         data.find((retweet) => retweet.userId === currentUser.id) !== undefined
 
     return (
-        <div className='bg-white lg:max-w-3xl w-full shadow-card-shadow rounded-lg p-4 my-5 first:mt-0 last:mb-0'>
+        <div
+            className={cn(
+                `bg-white duration-300 lg:max-w-3xl w-full shadow-card-shadow rounded-lg p-4 my-5 first:mt-0 last:mb-0 relative`,
+                pathName.includes('/tweet/') ? 'mx-auto' : 'hover:scale-[0.99]'
+            )}
+        >
+            {!pathName.includes('/tweet/') && (
+                <Link
+                    href={`/tweet/${tweet.id}`}
+                    className='absolute inset-0'
+                />
+            )}
             <Link
                 href={`/profile/${user.id}`}
-                className='flex items-center gap-2 w-fit hover:bg-black/10 rounded-lg p-1'
+                className='flex items-center gap-2 w-fit hover:bg-black/10 duration-300 rounded-lg p-1 relative z-20'
+                onClick={
+                    pathName.includes('/tweet/')
+                        ? async (e) => {
+                              e.preventDefault()
+                              const replacePromise = new Promise((resolve) => {
+                                  resolve(router.replace(`/profile/${user.id}`))
+                              })
+                              await replacePromise
+
+                              const backPromise = new Promise((resolve) => {
+                                  resolve(router.back())
+                              })
+                              await backPromise
+
+                              //   router.back()
+                              //   router.replace(`/profile/${user.id}`)
+                              //   router.refresh()
+                          }
+                        : undefined
+                }
             >
                 <UserAvatar name={user.name} image={user.image ?? undefined} />
                 <div className='flex flex-col'>
@@ -135,7 +168,7 @@ export default function TweetCard({
             </div>
 
             <Separator className='bg-lighter-gray' />
-            <div className='flex items-center justify-evenly py-1'>
+            <div className='flex items-center justify-evenly py-1 relative z-20'>
                 <TweetActionBtn
                     onClick={() => setCommentFocus((prev) => !prev)}
                 >
@@ -151,7 +184,9 @@ export default function TweetCard({
                 >
                     {isLoading && <Loader2 className='animate-spin text-xl' />}
                     <MdLoop className='text-xl' />
-                    <span className='hidden md:inline'>Retweet</span>
+                    <span className='hidden md:inline'>
+                        {userIn(tweet.retweets) ? 'Retweeted' : 'Retweet'}
+                    </span>
                 </TweetActionBtn>
                 <TweetActionBtn
                     onClick={() => mutate({ id: tweet.id, action: 'like' })}
@@ -160,7 +195,9 @@ export default function TweetCard({
                 >
                     {isLoading && <Loader2 className='animate-spin text-xl' />}
                     <MdFavoriteBorder className='text-xl' />
-                    <span className='hidden md:inline'>Like</span>
+                    <span className='hidden md:inline'>
+                        {userIn(tweet.likes) ? 'Liked' : 'Like'}
+                    </span>
                 </TweetActionBtn>
                 <TweetActionBtn
                     onClick={() => mutate({ id: tweet.id, action: 'save' })}
@@ -170,7 +207,9 @@ export default function TweetCard({
                 >
                     {isLoading && <Loader2 className='animate-spin text-xl' />}
                     <MdBookmarkBorder className='text-xl' />
-                    <span className='hidden md:inline'>Save</span>
+                    <span className='hidden md:inline'>
+                        {userIn(tweet.savedTweets) ? 'Saved' : 'Save'}
+                    </span>
                 </TweetActionBtn>
             </div>
             <Separator className='bg-lighter-gray' />

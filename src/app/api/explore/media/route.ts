@@ -1,8 +1,9 @@
 import { getServerAuthSession } from '@/server/auth'
 import { prisma } from '@/server/db'
-import { NextResponse, NextRequest } from 'next/server'
+import { NextResponse } from 'next/server'
+import { TWEET_OPTIONS } from '@/lib/constants'
 
-export async function GET(request: Request) {
+export async function GET() {
     const session = await getServerAuthSession()
     if (!session) {
         return new NextResponse('Unauthorized', { status: 401 })
@@ -15,58 +16,7 @@ export async function GET(request: Request) {
             },
         },
         include: {
-            user: {
-                select: {
-                    id: true,
-                    name: true,
-                    image: true,
-                    followersIds: true,
-                },
-            },
-            likes: {
-                select: {
-                    userId: true,
-                },
-            },
-            retweets: {
-                select: {
-                    userId: true,
-                },
-            },
-            replies: {
-                select: {
-                    id: true,
-                    text: true,
-                    createdAt: true,
-                    image: true,
-                    replyLikes: {
-                        select: {
-                            userId: true,
-                        },
-                    },
-                    user: {
-                        select: {
-                            id: true,
-                            name: true,
-                            image: true,
-                        },
-                    },
-                },
-                orderBy: {
-                    createdAt: 'desc',
-                },
-                take: 2,
-            },
-            savedTweets: {
-                select: {
-                    userId: true,
-                },
-            },
-            _count: {
-                select: {
-                    replies: true,
-                },
-            },
+            ...TWEET_OPTIONS,
         },
         orderBy: {
             createdAt: 'desc',

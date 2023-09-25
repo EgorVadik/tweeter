@@ -86,18 +86,37 @@ export default function TweetForm({ user }: TweetFormProps) {
     return (
         <form
             onSubmit={handleSubmit(onSubmit)}
-            className='flex flex-col gap-3 bg-white rounded-xl shadow-card-shadow p-3 lg:max-w-3xl w-full'
+            className='flex flex-col w-full gap-3 p-3 bg-white rounded-xl shadow-card-shadow lg:max-w-3xl'
         >
-            <p className='tracking-base font-semibold text-xs text-dark-gray'>
+            <p className='text-xs font-semibold tracking-base text-dark-gray'>
                 Tweet something
             </p>
             <Separator />
-            <div className='flex items-centers'>
-                <UserAvatar name={user.name} image={user.image ?? undefined} />
-                <div className='px-3 py-1 w-full font-medium tracking-base text-dark-gray'>
-                    <div className='flex items-center gap-2'>
+            <div className='sm:flex'>
+                <div className='flex'>
+                    <UserAvatar
+                        name={user.name}
+                        image={user.image ?? undefined}
+                    />
+                    <div className='flex items-center gap-2 px-3 py-1 sm:hidden'>
                         <textarea
-                            className='w-full resize-none bg-transparent outline-none'
+                            className='w-full bg-transparent outline-none resize-none'
+                            placeholder="What's happening?"
+                            rows={3}
+                            {...register('content')}
+                        />
+                        <ImagePreviewCard
+                            uploadProgress={uploadProgress}
+                            imageUrl={imageUrl}
+                            setValue={setValue}
+                            setImageUrl={setImageUrl}
+                        />
+                    </div>
+                </div>
+                <div className='w-full px-3 py-1 font-medium tracking-base text-dark-gray'>
+                    <div className='items-center hidden gap-2 sm:flex'>
+                        <textarea
+                            className='w-full bg-transparent outline-none resize-none'
                             placeholder="What's happening?"
                             rows={3}
                             {...register('content')}
@@ -123,7 +142,7 @@ export default function TweetForm({ user }: TweetFormProps) {
                             >
                                 <button
                                     type='button'
-                                    className='flex items-center gap-2'
+                                    className='flex items-center gap-2 text-xs sm:text-base'
                                 >
                                     {privateReply ? (
                                         <>
@@ -141,7 +160,7 @@ export default function TweetForm({ user }: TweetFormProps) {
                         </div>
                         <Button
                             disabled={isLoading}
-                            className='bg-primary-blue hover:bg-primary-blue/80 px-8'
+                            className='px-6 text-xs sm:px-8 bg-primary-blue hover:bg-primary-blue/80 sm:text-base'
                         >
                             {isLoading && (
                                 <Loader2

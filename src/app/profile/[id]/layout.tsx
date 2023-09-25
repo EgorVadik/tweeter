@@ -18,9 +18,9 @@ export default async function ProfileLayout({
     const session = await getServerAuthSession()
 
     return (
-        <main className='container'>
+        <main className='px-4 sm:container'>
             <ProfileInfoCard id={id} currentUser={session!.user} />
-            <div className='flex lg:flex-row flex-col gap-5'>
+            <div className='flex flex-col justify-center gap-5 lg:flex-row'>
                 <ProfileSideNav
                     navItems={[
                         { text: 'tweets', href: `/profile/${id}` },

@@ -33,7 +33,7 @@ export default function ProfileWrapper({
             <ScrollArea
                 ref={scrollAreaRef}
                 className={cn(
-                    'h-[calc(100vh-155px)] lg:max-w-3xl grow rounded-lg'
+                    'sm:pb-0 pb-14 h-[calc(100vh-155px)] lg:max-w-3xl grow rounded-lg'
                 )}
                 onScroll={handleScroll}
             >

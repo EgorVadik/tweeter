@@ -60,3 +60,11 @@ export interface Reply {
         userId: string
     }[]
 }
+
+export interface UserToFollow extends PartialUser {
+    bio: User['bio']
+    bannerImage: User['bannerImage']
+    _count: {
+        followers: number
+    }
+}

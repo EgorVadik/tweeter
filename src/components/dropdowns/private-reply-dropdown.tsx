@@ -17,8 +17,8 @@ export default function PrivateReplyDropdown({
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>{children}</DropdownMenuTrigger>
-            <DropdownMenuContent className='rounded-xl p-2'>
-                <DropdownMenuLabel className='text-dark-gray text-xs tracking-base'>
+            <DropdownMenuContent className='p-2 rounded-xl'>
+                <DropdownMenuLabel className='text-xs text-dark-gray tracking-base'>
                     <p className='font-semibold '>Who can reply?</p>
                     <p className='text-light-gray'>
                         Choose who can reply to this tweet
@@ -26,14 +26,14 @@ export default function PrivateReplyDropdown({
                 </DropdownMenuLabel>
 
                 <DropdownMenuItem
-                    className='flex gap-2 items-center text-dark-gray px-4 py-3 rounded-lg'
+                    className='flex items-center gap-2 px-4 py-3 rounded-lg text-dark-gray'
                     onClick={() => setPrivateReply(false)}
                 >
                     <MdPublic size={24} />
                     <span>Everyone</span>
                 </DropdownMenuItem>
                 <DropdownMenuItem
-                    className='flex gap-2 items-center text-dark-gray px-4 py-3 rounded-lg'
+                    className='flex items-center gap-2 px-4 py-3 rounded-lg text-dark-gray'
                     onClick={() => setPrivateReply(true)}
                 >
                     <MdPeople size={24} />

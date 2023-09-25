@@ -11,7 +11,7 @@ export default async function NavBar() {
     const session = await getServerAuthSession()
 
     return (
-        <nav className='flex items-center justify-around bg-white'>
+        <nav className='flex items-center justify-between px-3 py-2 bg-white sm:justify-around sm:px-0 sm:py-0'>
             <Link href='/'>
                 <Image
                     src={'/tweeter.svg'}
@@ -20,7 +20,7 @@ export default async function NavBar() {
                     width={130}
                 />
             </Link>
-            <ul className='flex items-center gap-10'>
+            <ul className='items-center hidden gap-10 sm:flex'>
                 <NavItem href='/' text='Home' />
                 <NavItem href='/explore' text='Explore' />
                 <NavItem href='/bookmarks' text='Bookmarks' />
@@ -33,10 +33,12 @@ export default async function NavBar() {
                                 name={session.user.name}
                                 image={session.user.image ?? undefined}
                             />
-                            <span>{session.user.name}</span>
+                            <span className='hidden sm:inline'>
+                                {session.user.name}
+                            </span>
                             <ChevronDown
                                 size={15}
-                                className='ml-2 group-aria-expanded:-rotate-180 duration-200'
+                                className='hidden ml-2 duration-200 group-aria-expanded:-rotate-180 sm:inline'
                             />
                         </button>
                     </ProfileDropdown>

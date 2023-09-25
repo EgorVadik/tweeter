@@ -1,6 +1,7 @@
 import { prisma } from '@/server/db'
 import { AxiosError } from 'axios'
 import moment from 'moment'
+import { TWEET_OPTIONS } from '@/lib/constants'
 
 export const showSignUpError = (error: unknown, toast: any) => {
     if (error instanceof AxiosError) {
@@ -50,58 +51,7 @@ export const formatNumber = (number: number) => {
 export const getTweets = async (orderBy: any) => {
     const tweets = await prisma.tweet.findMany({
         include: {
-            user: {
-                select: {
-                    id: true,
-                    name: true,
-                    image: true,
-                    followersIds: true,
-                },
-            },
-            likes: {
-                select: {
-                    userId: true,
-                },
-            },
-            retweets: {
-                select: {
-                    userId: true,
-                },
-            },
-            replies: {
-                select: {
-                    id: true,
-                    text: true,
-                    createdAt: true,
-                    image: true,
-                    replyLikes: {
-                        select: {
-                            userId: true,
-                        },
-                    },
-                    user: {
-                        select: {
-                            id: true,
-                            name: true,
-                            image: true,
-                        },
-                    },
-                },
-                orderBy: {
-                    createdAt: 'desc',
-                },
-                take: 2,
-            },
-            savedTweets: {
-                select: {
-                    userId: true,
-                },
-            },
-            _count: {
-                select: {
-                    replies: true,
-                },
-            },
+            ...TWEET_OPTIONS,
         },
         orderBy,
     })
@@ -117,58 +67,7 @@ export const getBookmarkedTweets = async (userId: string, orderBy: any) => {
         include: {
             tweet: {
                 include: {
-                    user: {
-                        select: {
-                            id: true,
-                            name: true,
-                            image: true,
-                            followersIds: true,
-                        },
-                    },
-                    likes: {
-                        select: {
-                            userId: true,
-                        },
-                    },
-                    retweets: {
-                        select: {
-                            userId: true,
-                        },
-                    },
-                    replies: {
-                        select: {
-                            id: true,
-                            text: true,
-                            createdAt: true,
-                            image: true,
-                            replyLikes: {
-                                select: {
-                                    userId: true,
-                                },
-                            },
-                            user: {
-                                select: {
-                                    id: true,
-                                    name: true,
-                                    image: true,
-                                },
-                            },
-                        },
-                        orderBy: {
-                            createdAt: 'desc',
-                        },
-                        take: 2,
-                    },
-                    savedTweets: {
-                        select: {
-                            userId: true,
-                        },
-                    },
-                    _count: {
-                        select: {
-                            replies: true,
-                        },
-                    },
+                    ...TWEET_OPTIONS,
                 },
             },
         },

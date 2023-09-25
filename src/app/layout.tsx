@@ -4,8 +4,8 @@ import { Inter } from 'next/font/google'
 import { Toaster } from '@/components/ui/toaster'
 import ClientProviders from '@/components/client-providers'
 import NavBar from '@/components/nav/nav-bar'
-import ProfileSideNav from '@/components/nav/profile-side-nav'
-import SearchBar from '@/components/forms/search-bar'
+import React from 'react'
+import NavBarMob from '@/components/nav/nav-bar-mob'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -21,15 +21,22 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
     children,
+    modal,
 }: {
     children: React.ReactNode
+    modal: React.ReactNode
 }) {
     return (
         <html lang='en'>
-            <body className={`bg-lighter-gray min-h-screen ${inter.className}`}>
+            <body
+                className={`bg-lighter-gray min-h-screen ${inter.className}`}
+                style={{}}
+            >
                 <ClientProviders>
                     <NavBar />
                     {children}
+                    <NavBarMob />
+                    {modal}
                     <Toaster />
                 </ClientProviders>
             </body>

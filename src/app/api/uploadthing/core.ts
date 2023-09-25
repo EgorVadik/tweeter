@@ -12,16 +12,22 @@ export const ourFileRouter = {
                 req,
             })) as User | null
 
-            console.log({ user })
+            if (!user) throw new Error('Unauthorized')
+            return { userId: user.id }
+        })
+        .onUploadComplete(async ({ metadata, file }) => {
+            console.log({ metadata, file })
+        }),
+    editProfileImages: f({ image: { maxFileSize: '4MB', maxFileCount: 1 } })
+        .middleware(async ({ req }) => {
+            const user = (await getToken({
+                req,
+            })) as User | null
 
             if (!user) throw new Error('Unauthorized')
             return { userId: user.id }
         })
         .onUploadComplete(async ({ metadata, file }) => {
-            // const user = await prisma.user.update({
-            //     where: { id: metadata.userId },
-            //     data: { image: file.url },
-            // })
             console.log({ metadata, file })
         }),
 } satisfies FileRouter
