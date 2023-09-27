@@ -1,17 +1,27 @@
 'use client'
 
+import dynamic from 'next/dynamic'
+
 import React, { useState } from 'react'
-import TweetForm from '../forms/tweet-form'
-import { ScrollArea } from '@/components/ui/scroll-area'
-import TweetCard from '../cards/tweet-card'
+import { usePathname } from 'next/navigation'
 import { useQuery } from '@tanstack/react-query'
 import { getTweets } from '@/lib/api-client'
 import { useIntersection } from '@mantine/hooks'
-import { Button } from '../ui/button'
 import { cn } from '@/lib/utils'
-import { usePathname } from 'next/navigation'
-import { Separator } from '../ui/separator'
-import WhoToFollowCard from '../cards/who-to-follow-card'
+
+const TweetCard = dynamic(() => import('../cards/tweet-card'))
+const TweetForm = dynamic(() => import('../forms/tweet-form'))
+const Button = dynamic(() =>
+    import('../ui/button').then((module) => module.Button)
+)
+const Separator = dynamic(() =>
+    import('../ui/separator').then((module) => module.Separator)
+)
+const WhoToFollowCard = dynamic(() => import('../cards/who-to-follow-card'))
+const ScrollArea = dynamic(() =>
+    import('../ui/scroll-area').then((module) => module.ScrollArea)
+)
+const NoData = dynamic(() => import('../cards/no-data'))
 
 import type { User as SessionUser } from 'next-auth'
 import type { HomeTweet, UserToFollow } from '@/types/types'
@@ -28,7 +38,6 @@ export default function HomeWrapper({
     usersToFollow,
 }: HomeWrapperProps) {
     const [tweetForm, setTweetForm] = useState(false)
-    const containerRef = React.useRef<HTMLDivElement>(null)
     const pathName = usePathname()
     const { data } = useQuery({
         queryKey: ['tweets', pathName],
@@ -38,7 +47,6 @@ export default function HomeWrapper({
     })
 
     const { ref, entry } = useIntersection({
-        root: containerRef.current,
         threshold: 0,
     })
 
@@ -61,7 +69,6 @@ export default function HomeWrapper({
                     </div>
                 )}
                 <ScrollArea
-                    ref={containerRef}
                     className={cn(
                         'sm:pb-0 pb-8 h-[calc(100vh-110px)] lg:max-w-3xl w-full rounded-lg',
                         !entry?.isIntersecting &&
@@ -75,14 +82,21 @@ export default function HomeWrapper({
                     <div ref={ref}>
                         <TweetForm user={user} />
                     </div>
-                    {data?.map((tweet) => (
-                        <TweetCard
-                            key={tweet.id}
-                            tweet={tweet}
-                            user={tweet.user}
-                            currentUser={user}
+                    {data.length > 0 ? (
+                        data?.map((tweet) => (
+                            <TweetCard
+                                key={tweet.id}
+                                tweet={tweet}
+                                user={tweet.user}
+                                currentUser={user}
+                            />
+                        ))
+                    ) : (
+                        <NoData
+                            title='Nothing to see here — yet'
+                            subtitle="When there is, it'll show up here."
                         />
-                    ))}
+                    )}
                 </ScrollArea>
             </div>
             <div className='w-full max-w-3xl lg:max-w-xs'>

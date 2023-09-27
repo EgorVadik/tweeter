@@ -1,12 +1,13 @@
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
-import { Button } from '@/components/ui/button'
 import { formatNumber } from '@/lib/helpers'
 import { prisma } from '@/server/db'
 import { redirect } from 'next/navigation'
+import Link from 'next/link'
+
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
+import { Button } from '@/components/ui/button'
 import UserBanner from './user-banner'
 import FollowDialog from '../dialogs/follow-dialog'
 import FollowBtn from '../buttons/follow-btn'
-import Link from 'next/link'
 
 import type { FollowUser } from '@/types/types'
 import type { User } from 'next-auth'

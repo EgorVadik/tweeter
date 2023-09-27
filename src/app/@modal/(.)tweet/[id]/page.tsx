@@ -1,7 +1,8 @@
-import TweetDialog from '@/components/dialogs/tweet-dialog'
 import { getServerAuthSession } from '@/server/auth'
 import { prisma } from '@/server/db'
 import { redirect } from 'next/navigation'
+
+import TweetDialog from '@/components/dialogs/tweet-dialog'
 
 export default async function page({
     params: { id },

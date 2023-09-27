@@ -1,7 +1,8 @@
-import { Button } from '../ui/button'
-import UserAvatar from './user-avatar'
 import { setFollowUser } from '@/lib/api-client'
 import { useHover } from '@mantine/hooks'
+
+import { Button } from '../ui/button'
+import UserAvatar from './user-avatar'
 
 import type { User } from 'next-auth'
 import type { FollowUser } from '@/types/types'
@@ -29,8 +30,8 @@ export default function FollowCard({
             <div className='flex justify-between first:mt-5'>
                 <div className='flex items-center gap-3'>
                     <UserAvatar name={user.name} image={user.image ?? ''} />
-                    <div className=''>
-                        <h4 className='text-lg font-semibold text-black tracking-base '>
+                    <div>
+                        <h4 className='max-w-[200px] sm:max-w-sm text-lg font-semibold text-black truncate tracking-base'>
                             {user.name}
                         </h4>
                         <p className='text-xs text-light-gray tracking-base'>

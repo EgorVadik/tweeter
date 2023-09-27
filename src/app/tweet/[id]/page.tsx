@@ -1,8 +1,10 @@
-import TweetCard from '@/components/cards/tweet-card'
-import { ScrollArea } from '@/components/ui/scroll-area'
+import dynamic from 'next/dynamic'
 import { getServerAuthSession } from '@/server/auth'
 import { prisma } from '@/server/db'
 import { redirect } from 'next/navigation'
+
+import { ScrollArea } from '@/components/ui/scroll-area'
+const TweetCard = dynamic(() => import('@/components/cards/tweet-card'))
 
 export default async function page({
     params: { id },

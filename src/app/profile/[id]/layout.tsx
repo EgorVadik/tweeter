@@ -1,7 +1,8 @@
-import ProfileInfoCard from '@/components/cards/profile-info-card'
-import ProfileSideNav from '@/components/nav/profile-side-nav'
 import { getServerAuthSession } from '@/server/auth'
 import type { Metadata } from 'next'
+
+import ProfileInfoCard from '@/components/cards/profile-info-card'
+import ProfileSideNav from '@/components/nav/profile-side-nav'
 
 export const metadata: Metadata = {
     title: 'Tweeter - Profile',

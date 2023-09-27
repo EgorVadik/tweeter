@@ -1,4 +1,5 @@
 import React from 'react'
+
 import { Progress } from '../ui/progress'
 import Image from 'next/image'
 import { BiTrash } from 'react-icons/bi'
@@ -20,26 +21,26 @@ export default function ImagePreviewCard({
         <>
             {uploadProgress > 0 && (
                 <div className='relative w-28'>
-                    <span className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-black z-10 text-sm'>
+                    <span className='absolute z-10 text-sm text-black -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2'>
                         {uploadProgress}%
                     </span>
                     <Progress value={uploadProgress} />
                 </div>
             )}
             {imageUrl !== null && (
-                <div className='group relative h-24 w-28 mb-2'>
+                <div className='relative h-24 mb-2 group w-28'>
                     <Image
                         src={imageUrl}
                         alt='tweet image'
-                        className='w-full h-full object-cover rounded-xl'
+                        className='object-cover w-full h-full rounded-xl'
                         height={100}
                         width={100}
                     />
 
-                    <div className='opacity-0 group-hover:opacity-100 absolute inset-0 bg-black/60 rounded-xl duration-300'>
+                    <div className='absolute inset-0 duration-300 opacity-0 group-hover:opacity-100 bg-black/60 rounded-xl'>
                         <button
                             type='button'
-                            className='absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2'
+                            className='absolute -translate-x-1/2 -translate-y-1/2 top-1/2 left-1/2'
                             onClick={() => {
                                 setImageUrl(null)
                                 setValue('image', null)

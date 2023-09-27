@@ -1,14 +1,15 @@
 'use client'
 
 import React from 'react'
-import UserAvatar from './user-avatar'
 import { formatDate, formatNumber } from '@/lib/helpers'
-import { MdFavoriteBorder } from 'react-icons/md'
-import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { toggleReplyLike } from '@/lib/api-client'
 import { useToast } from '../ui/use-toast'
+
+import UserAvatar from './user-avatar'
+import { MdFavoriteBorder } from 'react-icons/md'
+import Image from 'next/image'
 
 import { AxiosError } from 'axios'
 import type { Reply } from '@/types/types'
@@ -75,17 +76,17 @@ export default function ReplyCard({ reply, currentUserId }: ReplyCardProps) {
                     name={reply.user.name}
                     image={reply.user.image ?? undefined}
                 />
-                <div className='w-full flex flex-col gap-2'>
-                    <div className='bg-lighter-gray flex flex-col p-3 w-full rounded-lg'>
-                        <div className='flex gap-2 items-center'>
-                            <span className='text-black tracking-base font-medium'>
+                <div className='flex flex-col w-full gap-2'>
+                    <div className='flex flex-col w-full p-3 rounded-lg bg-lighter-gray'>
+                        <div className='flex items-center gap-2'>
+                            <span className='font-medium text-black tracking-base'>
                                 {reply.user.name}
                             </span>
                             <span className='text-xs text-light-gray'>
                                 {formatDate(reply.createdAt)}
                             </span>
                         </div>
-                        <p className='text-dark-gray tracking-base mt-3 p-1'>
+                        <p className='p-1 mt-3 text-dark-gray tracking-base'>
                             {reply.text}
                         </p>
 
@@ -101,7 +102,7 @@ export default function ReplyCard({ reply, currentUserId }: ReplyCardProps) {
                             </div>
                         )}
                     </div>
-                    <div className='flex items-center gap-5 text-xs text-gray font-semibold tracking-base'>
+                    <div className='flex items-center gap-5 text-xs font-semibold text-gray tracking-base'>
                         <button
                             onClick={() => mutate(reply.id)}
                             className={`flex items-center gap-1 hover:text-light-red duration-200 ${

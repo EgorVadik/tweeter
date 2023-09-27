@@ -1,7 +1,8 @@
-import EditProfile from '@/components/forms/edit-profile-form'
 import { getServerAuthSession } from '@/server/auth'
 import { prisma } from '@/server/db'
 import { redirect } from 'next/navigation'
+
+import EditProfile from '@/components/forms/edit-profile-form'
 
 export const dynamic = 'force-dynamic'
 

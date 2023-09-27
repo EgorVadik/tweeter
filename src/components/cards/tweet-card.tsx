@@ -1,6 +1,14 @@
 'use client'
 
 import { formatDate, formatNumber } from '@/lib/helpers'
+import { useState } from 'react'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
+import { usePathname } from 'next/navigation'
+import { useToast } from '@/components/ui/use-toast'
+import { handleTweetActions } from '@/lib/api-client'
+import Link from 'next/link'
+import { cn } from '@/lib/utils'
+
 import Image from 'next/image'
 import TweetActionBtn from '@/components/buttons/tweet-action-btn'
 import { Separator } from '@/components/ui/separator'
@@ -12,15 +20,8 @@ import {
     MdBookmarkBorder,
 } from 'react-icons/md'
 import ReplyForm from '../forms/reply-form'
-import { useState } from 'react'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { usePathname } from 'next/navigation'
-import { useToast } from '@/components/ui/use-toast'
-import { handleTweetActions } from '@/lib/api-client'
 import { Loader2 } from 'lucide-react'
-import Link from 'next/link'
 import ReplyCard from './reply-card'
-import { cn } from '@/lib/utils'
 
 import { AxiosError } from 'axios'
 import type { User } from '@prisma/client'
@@ -132,6 +133,10 @@ export default function TweetCard({
             )}
 
             <div className='flex items-center justify-end gap-4 my-3 text-xs font-medium tracking-base text-gray'>
+                <p>
+                    {formatNumber(tweet.likes.length)} <span>Likes</span>
+                </p>
+
                 <p>
                     {formatNumber(tweet._count.replies)} <span>Replies</span>
                 </p>

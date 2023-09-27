@@ -1,7 +1,8 @@
 import { getServerAuthSession } from '@/server/auth'
-import HomeWrapper from '@/components/wrappers/home-wrapper'
 import { getTweets } from '@/lib/helpers'
 import { prisma } from '@/server/db'
+
+import HomeWrapper from '@/components/wrappers/home-wrapper'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0

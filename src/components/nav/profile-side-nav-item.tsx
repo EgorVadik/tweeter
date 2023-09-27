@@ -1,9 +1,10 @@
 'use client'
 
 import { cn } from '@/lib/utils'
-import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import React from 'react'
+
+import Link from 'next/link'
 
 type ProfileSideNavItemProps = {
     text: string
@@ -38,7 +39,7 @@ export default function ProfileSideNavItem({
             >
                 <li>
                     {pathName === href && <CurrentlyOn />}
-                    <CurrentlyOn className='opacity-0 group-hover:opacity-100 duration-300' />
+                    <CurrentlyOn className='duration-300 opacity-0 group-hover:opacity-100' />
                     {text}
                 </li>
             </Link>

@@ -1,7 +1,7 @@
 import { getServerAuthSession } from '@/server/auth'
 import { prisma } from '@/server/db'
 import { NextResponse } from 'next/server'
-import { TWEET_OPTIONS } from '@/lib/constants'
+import { getTweets } from '@/lib/helpers'
 
 export async function GET() {
     const session = await getServerAuthSession()
@@ -10,13 +10,8 @@ export async function GET() {
         return new NextResponse('Unauthorized', { status: 401 })
     }
 
-    const tweets = await prisma.tweet.findMany({
-        include: {
-            ...TWEET_OPTIONS,
-        },
-        orderBy: {
-            createdAt: 'desc',
-        },
+    const tweets = getTweets({
+        createdAt: 'desc',
     })
 
     return new NextResponse(

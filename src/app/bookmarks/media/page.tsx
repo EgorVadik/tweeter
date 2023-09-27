@@ -1,8 +1,9 @@
-import BookmarksWrapper from '@/components/wrappers/bookmarks-wrapper'
+import React from 'react'
 import { getServerAuthSession } from '@/server/auth'
 import { prisma } from '@/server/db'
-import React from 'react'
 import { TWEET_OPTIONS } from '@/lib/constants'
+
+import BookmarksWrapper from '@/components/wrappers/bookmarks-wrapper'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0

@@ -1,11 +1,12 @@
 import React from 'react'
-import Image from 'next/image'
 import { getServerAuthSession } from '@/server/auth'
-import NavItem from './nav-item'
+
+import Image from 'next/image'
 import { ChevronDown } from 'lucide-react'
 import ProfileDropdown from '../dropdowns/profile-dropdown'
 import Link from 'next/link'
 import UserAvatar from '../cards/user-avatar'
+import NavItem from './nav-item'
 
 export default async function NavBar() {
     const session = await getServerAuthSession()

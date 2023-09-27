@@ -1,4 +1,3 @@
-import ProfileWrapper from '@/components/wrappers/profile-wrapper'
 import { getServerAuthSession } from '@/server/auth'
 import { prisma } from '@/server/db'
 import { redirect } from 'next/navigation'
@@ -6,6 +5,8 @@ import {
     PROFILE_TWEETS_OPTIONS,
     PROFILE_FOLLOWS_OPTIONS,
 } from '@/lib/constants'
+
+import ProfileWrapper from '@/components/wrappers/profile-wrapper'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0

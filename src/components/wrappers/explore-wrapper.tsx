@@ -1,12 +1,18 @@
 'use client'
 
+import dynamic from 'next/dynamic'
+
 import React from 'react'
-import { ScrollArea } from '../ui/scroll-area'
 import { cn } from '@/lib/utils'
-import TweetCard from '../cards/tweet-card'
 import { useQuery } from '@tanstack/react-query'
-import { usePathname } from 'next/navigation'
 import { getExplore } from '@/lib/api-client'
+import { usePathname } from 'next/navigation'
+
+const TweetCard = dynamic(() => import('../cards/tweet-card'))
+const ScrollArea = dynamic(() =>
+    import('../ui/scroll-area').then((module) => module.ScrollArea)
+)
+const NoData = dynamic(() => import('../cards/no-data'))
 
 import type { User as SessionUser } from 'next-auth'
 import type { HomeTweet } from '@/types/types'
@@ -44,14 +50,21 @@ export default function ExploreWrapper({
                     'sm:pb-0 pb-14 h-[calc(100vh-155px)] lg:max-w-3xl grow rounded-lg'
                 )}
             >
-                {data?.map((tweet) => (
-                    <TweetCard
-                        key={tweet.id}
-                        tweet={tweet}
-                        user={tweet.user}
-                        currentUser={user}
+                {data.length > 0 ? (
+                    data?.map((tweet) => (
+                        <TweetCard
+                            key={tweet.id}
+                            tweet={tweet}
+                            user={tweet.user}
+                            currentUser={user}
+                        />
+                    ))
+                ) : (
+                    <NoData
+                        title='Nothing to see here — yet'
+                        subtitle="When there is, it'll show up here."
                     />
-                ))}
+                )}
             </ScrollArea>
         </>
     )

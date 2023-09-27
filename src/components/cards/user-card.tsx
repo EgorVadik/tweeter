@@ -1,15 +1,16 @@
 'use client'
 
 import React from 'react'
-import UserAvatar from './user-avatar'
-import { IoMdPersonAdd } from 'react-icons/io'
-import { formatNumber } from '@/lib/helpers'
 import Link from 'next/link'
-import { Button } from '../ui/button'
 import { useHover } from '@mantine/hooks'
 import { setFollowUser } from '@/lib/api-client'
 import { useToast } from '../ui/use-toast'
 import { useRouter } from 'next/navigation'
+
+import UserAvatar from './user-avatar'
+import { IoMdPersonAdd } from 'react-icons/io'
+import { formatNumber } from '@/lib/helpers'
+import { Button } from '../ui/button'
 
 import type { UserSearch } from '@/types/types'
 

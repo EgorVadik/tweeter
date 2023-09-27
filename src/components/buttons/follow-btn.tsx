@@ -1,11 +1,12 @@
 'use client'
 
 import { ComponentPropsWithoutRef } from 'react'
-import { Button } from '../ui/button'
 import { useRouter } from 'next/navigation'
 import { useToast } from '../ui/use-toast'
 import { setFollowUser } from '@/lib/api-client'
 import { useHover } from '@mantine/hooks'
+
+import { Button } from '../ui/button'
 
 type FollowBtnProps = {
     followType: 'Unfollow' | 'Follow'

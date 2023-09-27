@@ -1,15 +1,16 @@
 'use client'
 
 import React, { useEffect, useState } from 'react'
+import { useDebouncedState } from '@mantine/hooks'
+import axios from 'axios'
+import { cn } from '@/lib/utils'
+import { useSession } from 'next-auth/react'
+
+import UserCard from '../cards/user-card'
+import { Separator } from '../ui/separator'
 import { Input } from '../ui/input'
 import { AiOutlineSearch } from 'react-icons/ai'
 import { Button } from '../ui/button'
-import { useDebouncedState } from '@mantine/hooks'
-import axios from 'axios'
-import UserCard from '../cards/user-card'
-import { cn } from '@/lib/utils'
-import { Separator } from '../ui/separator'
-import { useSession } from 'next-auth/react'
 
 import type { UserSearch } from '@/types/types'
 

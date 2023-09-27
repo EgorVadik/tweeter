@@ -7,8 +7,9 @@ import axios from 'axios'
 import { signIn } from 'next-auth/react'
 import { showSignUpError } from '@/lib/helpers'
 import { useRouter } from 'next/navigation'
+import { useToast } from '@/components/ui/use-toast'
+
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
 import {
     Card,
     CardContent,
@@ -17,8 +18,8 @@ import {
     CardHeader,
     CardTitle,
 } from '@/components/ui/card'
+import { Input } from '@/components/ui/input'
 import { Loader2 } from 'lucide-react'
-import { useToast } from '@/components/ui/use-toast'
 
 import {
     type SignInForm,
@@ -134,40 +135,6 @@ export default function Auth({ authType }: Props) {
                     </div>
                     {authType === 'sign-up' && (
                         <>
-                            {/* <div
-                                className='w-32 h-32 m-auto mt-5 border rounded-full'
-                                {...getRootProps()}
-                            > */}
-                            {/* <input
-                                    // {...getInputProps()}
-                                    // type='file'
-                                    // className='sr-only'
-                                    // {...register('image')}
-                                /> */}
-
-                            {/* <UploadDropzone
-                                endpoint='profileImageUpload'
-                                className='w-32 h-32 m-auto mt-5 rounded-full'
-                                content={{
-                                    label: 'Upload image',
-                                }}
-                                onClientUploadComplete={(url) => {
-                                    alert(url)
-                                }}
-                                onUploadProgress={(progress) => {
-                                    console.log(progress)
-                                }}
-                                onUploadError={(error) => {
-                                    alert(error.message)
-                                }}
-                                onUploadBegin={(file) => {
-                                    alert(file)
-                                }}
-                                config={{
-                                    mode: 'auto',
-                                }}
-                            /> */}
-                            {/* </div> */}
                             <div className='grid gap-2'>
                                 <label htmlFor='name'>
                                     Name

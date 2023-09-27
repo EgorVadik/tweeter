@@ -1,7 +1,8 @@
-import ExploreWrapper from '@/components/wrappers/explore-wrapper'
 import { getTweets } from '@/lib/helpers'
 import { getServerAuthSession } from '@/server/auth'
 import React from 'react'
+
+import ExploreWrapper from '@/components/wrappers/explore-wrapper'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0

@@ -1,8 +1,9 @@
-import ExploreWrapper from '@/components/wrappers/explore-wrapper'
 import { getServerAuthSession } from '@/server/auth'
 import { prisma } from '@/server/db'
 import React from 'react'
 import { TWEET_OPTIONS } from '@/lib/constants'
+
+import ExploreWrapper from '@/components/wrappers/explore-wrapper'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0

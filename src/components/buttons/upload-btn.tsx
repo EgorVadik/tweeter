@@ -1,5 +1,6 @@
-import { UploadDropzone } from '@/utils/uploadthing'
 import React from 'react'
+
+import { UploadDropzone } from '@/utils/uploadthing'
 import { MdOutlineImage } from 'react-icons/md'
 
 type UploadBtnProps = {
@@ -33,7 +34,7 @@ export default function UploadBtn({
                     display: 'none',
                 },
             }}
-            className='w-fit outline-none ring-0 ring-offset-0 p-0 border-0 m-0'
+            className='p-0 m-0 border-0 outline-none w-fit ring-0 ring-offset-0'
             endpoint='tweetImageUpload'
             onClientUploadComplete={(data) => {
                 setUploadProgress(0)

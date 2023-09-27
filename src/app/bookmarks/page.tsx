@@ -1,7 +1,7 @@
-import BookmarksWrapper from '@/components/wrappers/bookmarks-wrapper'
 import { getBookmarkedTweets } from '@/lib/helpers'
 import { getServerAuthSession } from '@/server/auth'
-import React from 'react'
+
+import BookmarksWrapper from '@/components/wrappers/bookmarks-wrapper'
 
 export const dynamic = 'force-dynamic'
 export const revalidate = 0

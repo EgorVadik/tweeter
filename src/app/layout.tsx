@@ -1,11 +1,12 @@
 import './globals.css'
-import { Inter } from 'next/font/google'
-import { Toaster } from '@/components/ui/toaster'
-import ClientProviders from '@/components/client-providers'
-import NavBar from '@/components/nav/nav-bar'
 import React from 'react'
+import { Inter } from 'next/font/google'
+
+import NavBar from '@/components/nav/nav-bar'
+import { Toaster } from '@/components/ui/toaster'
 import NavBarMob from '@/components/nav/nav-bar-mob'
 import HiddenWrapper from '@/components/wrappers/hidden-wrapper'
+import ClientProviders from '@/components/client-providers'
 
 import type { Metadata } from 'next'
 

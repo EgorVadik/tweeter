@@ -1,16 +1,22 @@
 'use client'
 
+import dynamic from 'next/dynamic'
 import { useState } from 'react'
-import EditInput from './edit-input'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { FaArrowLeft } from 'react-icons/fa'
 import axios, { AxiosError } from 'axios'
 import { useToast } from '@/components/ui/use-toast'
 import { useRouter } from 'next/navigation'
-import { Button } from '../ui/button'
 import { UploadDropzone } from '@/utils/uploadthing'
 import { useSession } from 'next-auth/react'
+
+const EditInput = dynamic(() => import('./edit-input'))
+const FaArrowLeft = dynamic(() =>
+    import('react-icons/fa').then((module) => module.FaArrowLeft)
+)
+const Button = dynamic(() =>
+    import('../ui/button').then((module) => module.Button)
+)
 
 import type { UserEdit as UserType } from '@/types/types'
 import { type UserEdit, UserEditSchema } from '@/validations/zod-validations'

@@ -1,5 +1,8 @@
 'use client'
 
+import { signOut } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
+
 import {
     DropdownMenu,
     DropdownMenuContent,
@@ -10,8 +13,6 @@ import {
 import { FaUserCircle } from 'react-icons/fa'
 import { IoMdSettings } from 'react-icons/io'
 import { MdExitToApp } from 'react-icons/md'
-import { signOut } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
 
 import type { User } from 'next-auth'
 

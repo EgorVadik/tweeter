@@ -1,5 +1,9 @@
 'use client'
 
+import { useRouter } from 'next/navigation'
+import { useToast } from '../ui/use-toast'
+import { Fragment } from 'react'
+
 import {
     Dialog,
     DialogContent,
@@ -9,9 +13,6 @@ import {
 } from '@/components/ui/dialog'
 import { Separator } from '../ui/separator'
 import FollowCard from '../cards/follow-card'
-import { useRouter } from 'next/navigation'
-import { useToast } from '../ui/use-toast'
-import { Fragment } from 'react'
 
 import type { FollowUser } from '@/types/types'
 import type { User } from 'next-auth'
